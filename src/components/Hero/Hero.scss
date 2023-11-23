@@ -1,0 +1,48 @@
+@import '../../style/variables.scss';
+
+.home-hero {
+  background: url("../../assets/images/hero-banner.png") no-repeat center / cover;
+  height: 34.625rem;
+
+  @include center-column;
+  justify-content: center;
+
+  &__title {
+    color: $color-light;
+    font-size: 3rem;
+    font-weight: $font-bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center
+  }
+
+  &__search {
+    @include center-row;
+    background-color: $color-light;
+    padding: 2.875rem 2.375rem;
+    gap: 2rem;
+    max-width: 63.438rem;
+    width: 80%;
+    position: absolute;
+    margin: 33rem 2rem 0 2rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+  
+  &__input {
+    background-color: $color-light;
+    color: $color-dark;
+    padding: .5rem;
+    font-size: 1rem;
+    border: none;
+    width: 100%;
+  }
+
+}
+
+@media(max-width: 768px) {
+  .home-hero {
+    &__search {
+      width: 70%;
+    }
+  }
+}

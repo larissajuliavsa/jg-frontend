@@ -1,0 +1,94 @@
+@import '../../style/variables.scss';
+
+.product {
+  padding: 10.25rem 0;
+  background-color: $color-light;
+  color: $color-dark;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+
+  &--align {
+    @include center-column;
+    gap: 5rem;
+  }
+
+  &__title {
+    @include center-row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    font-size: 3rem;
+    font-weight: $font-bold;
+    width: fit-content;
+    margin: 0 auto;
+    gap: 11rem;
+  }
+
+  &__list {
+    width: 17rem;
+  }
+
+  &__item {
+    @include center-row;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+  
+  &__subtitle {
+    font-weight: $font-medium;
+  }
+
+  &__line {
+    width: 245px;
+    height: 2px;
+    margin: 0.5rem auto;
+    background-color: $color-primary;
+  }
+
+  &__body {
+    @include center-row;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9rem;
+    max-width: 60rem;
+    width: 100%;
+    padding: 2rem 3rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+  
+  &__desc {
+    width: 26rem;
+    line-height: normal;
+
+    .product__subtitle {
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+@media(max-width: 1101px) {
+  .product {
+    &__title {
+      gap: 6rem;
+    }
+  }
+}
+
+@media(max-width: 1001px) {
+  .product {
+    &__title {
+      justify-content: center;
+    }
+  }
+}
+
+@media(max-width: 768px) {
+  .product {
+    &__body {
+      justify-content: center;
+      gap: 6rem;
+      width: 80%;
+    }
+  }
+}

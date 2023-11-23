@@ -1,0 +1,25 @@
+@import '../../style/variables.scss';
+
+.products {  
+  &__item {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: fit-content;
+    margin: 0 auto;
+  }
+
+  &__img {
+    max-width: 21rem;
+    width: 90%;
+  }
+
+  &__title {
+    text-transform: uppercase;
+    font-weight: $font-medium;
+  }
+
+  &__desc {
+    text-transform: uppercase;
+  }
+}

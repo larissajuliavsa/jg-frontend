@@ -1,0 +1,29 @@
+@import '../../style/variables.scss';
+
+.catalog {
+  padding: 10.25rem 0;
+  background-color: $color-light;
+  @include center-row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 3rem;
+
+  &__products {
+    @include center-row;
+    flex-wrap: wrap;
+    gap: 6rem;
+    max-width: 79rem;
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+@media(max-width: 768px) {
+  .catalog {
+    flex-direction: column;
+
+    &__products {
+      justify-content: center;
+    }
+  }
+}
