@@ -1,0 +1,117 @@
+@import '../../style/variables.scss';
+
+.navbar {
+  color: $color-dark;
+  background-color: $color-light;
+  min-height: 70px;
+  
+  &--justify {
+    @include center-row;
+    justify-content: space-between;
+    padding: 2.5rem 0;
+  }
+
+  &__logo {
+    a {
+      text-transform: uppercase;
+      font-weight: $font-bold;
+      letter-spacing: 1px
+    }
+  }
+
+  &__menu {
+    @include center-row;
+    gap: 2rem;
+
+    li {
+
+      .active {
+        .navbar__line {
+          background-color: $color-primary
+        }
+      }
+
+      &:hover {
+        .navbar__line {
+          background-color: $color-primary
+        }
+      }
+
+      a {
+        @include center-column;
+        gap: 5px;
+      }
+    }
+  }
+
+  &__line {
+    width: 32px;
+    height: 2px;
+    background-color: $color-light;
+  }
+
+  &__hamburger {
+    display: none;
+    cursor: pointer;
+
+    .bar {
+      display: block;
+      width: 25px;
+      height: 3px;
+      margin: 5px auto;
+      transition: all 0.3s ease-in-out;
+      -webkit-transition: all 0.3s ease-in-out;
+      background-color: $color-dark;
+      border-radius: 2px;
+    }
+  }
+}
+
+@media(max-width: 768px) {
+  .navbar {
+    position: fixed;
+    width: 100vw;
+    z-index: 1;
+
+    &__hamburger {
+      display: block;
+    }
+
+    &__hamburger.active {
+      .bar:nth-child(2) {
+        opacity: 0;
+      }
+      .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+      .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+    }
+
+    &__menu {
+      position: fixed;
+      left: 100%;
+      top: 109px;
+      gap: 4rem;
+      flex-direction: column;
+      font-weight: 900;
+      color: $color-light;
+      background-color: $color-dark;
+      text-align: center;
+      letter-spacing: 2px;
+      width: 100%;
+      padding: 2rem 0;
+      transition: 0.3s;
+      z-index: 1;      
+    }
+
+      &__line {
+        background-color: $color-dark;
+      }
+
+    &__menu.active {
+      left: 0;
+    }
+  }
+}
