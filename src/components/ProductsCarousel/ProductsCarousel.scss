@@ -1,0 +1,40 @@
+@import '../../style/variables.scss';
+
+.home-products {
+  background-color: $color-light;
+  color: $color-dark;
+  @include center-column;
+  gap: 5rem;
+  padding: 5.313rem 0;
+
+  &__carousel {
+    padding: 3.438rem 0;
+  }
+
+}
+
+.slick-arrow {
+  width: 16px;
+  height: 30px;
+
+  &.slick-next {
+    background: url("../../assets/images/arrow-right.svg") no-repeat center / cover;
+  
+    &::before {
+      content: '';
+    }
+  }
+  &.slick-prev {
+    background: url("../../assets/images/arrow-left.svg") no-repeat center / cover;
+  
+    &::before {
+      content: '';
+    }
+  }
+}
+
+.home-banner {
+  background: url("../../assets/images/home-banner.png") no-repeat center / cover;
+  width: 100%;
+  height: 34.875rem;
+}
