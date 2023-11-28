@@ -1,0 +1,50 @@
+@import '../../style/variables.scss';
+
+.search {
+  background-color: $color-light;
+  padding: 2.5rem;
+  max-width: 63.438rem;
+  width: 80%;
+  position: absolute;
+  top: 37rem;
+  // margin: 33rem 2rem 0 2rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  z-index: 1;
+
+  &--align {
+    @include center-row;
+    gap: 2rem;
+  }
+
+  &__input {
+    background-color: $color-light;
+    color: $color-dark;
+    padding: .5rem;
+    font-size: 1rem;
+    border: none;
+    width: 100%;
+  }
+
+  &__result {
+    color: $color-dark;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__item {
+    padding: .5rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #00b0b92c;
+    }
+  }
+}
+
+@media(max-width: 768px) {
+  .search {
+    top: 29rem;
+  }
+}

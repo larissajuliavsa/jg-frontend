@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './Filter.scss';
 import Slider from 'react-slider';
+import { formatCurrency } from '../../utils/utils';
 
 const priceMin = 0;
 const priceMax = 120000;
@@ -12,11 +13,6 @@ const yearMax = 2024;
 function Filter() {
   const [price, setPrice] = useState([priceMin, priceMax]);
   const [year, setYear] = useState([yearMin, yearMax]);
-
-  const formatCurrency = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  });
 
   const formatMinValue = formatCurrency.format(price[0]);
   const formatMaxValue = formatCurrency.format(price[1]);

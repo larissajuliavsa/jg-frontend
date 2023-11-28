@@ -1,0 +1,126 @@
+@import '../../style/variables.scss';
+
+.form {
+  @include center-column;
+  color: $color-dark;
+  width: 100vw;
+  height: 100vh;
+
+  &__back-home {
+    @include center-row;
+    gap: 1rem;
+    position: absolute;
+    top: 70px;
+    left: 70px;
+    color: $color-light;
+    text-transform: uppercase;
+
+    img {
+      width: 1.2rem;
+    }
+  }
+
+  &__login,
+  &__cadastro {
+    background-position: center;
+    background-size: cover;
+  }
+
+  &__login {
+    background-image: url("../../assets/images/form-login.png");
+  }
+
+  &__cadastro {
+    background-image: url("../../assets/images/form-cadastro.png");
+  }
+
+  &--align {
+    background-color: $color-light;
+    max-width: 33rem;
+    width: 100%;
+    padding: 3rem 4rem;
+  }
+
+  &__title {
+    @include center-row;
+    align-items: flex-end;
+    justify-content: space-between;
+    font-weight: $font-bold;
+    text-transform: uppercase;
+
+    h1 {
+      font-size: 3rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  &__item {
+    @include center-column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin: 5rem 0;
+    max-width: 22rem;
+    width: 100%;
+  }
+
+  &__label {
+    width: 100%;
+
+    &--radio {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__input {
+    padding: .5rem;
+    background-color: $color-light;
+    border: none;
+    border-bottom: 1.5px solid $color-primary;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+
+    &--error {
+      border-bottom: 1.5px solid red;
+    }
+  }
+
+  &__error {
+    color: red;
+    font-size: 10px;
+    text-transform: lowercase;
+  }
+
+  &__buttons {
+    @include center-column;
+    gap: 3rem;
+
+    font-size: 0.75rem;
+
+    .enter {
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    p {
+      a {
+        color: $color-primary;
+
+        &:hover {
+          color: $color-primary-hover;
+        }
+      }
+    }
+  }
+}
