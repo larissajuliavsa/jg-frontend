@@ -48,7 +48,7 @@ function ImagesCarousel() {
         {
           productImage.map((item, index) => (
             <Product
-              key={item.name}
+              key={item.id}
               index={index}
               name={item.name}
               price={item.price}

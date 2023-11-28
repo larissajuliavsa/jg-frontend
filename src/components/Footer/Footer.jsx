@@ -1,12 +1,20 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import whatsapp from '../../assets/images/whatsapp.svg';
 import './Footer.scss';
-import Register from '../Register/Register';
+import HomeRegister from '../HomeRegister/HomeRegister';
 
 function Footer() {
+  const { pathname } = useLocation();
+  const cadastroVeiculo = '/veiculo/cadastro';
+  const isUser = JSON.parse(localStorage.getItem('userData'));
+
   return (
     <>
-      <Register />
+      {
+        isUser && pathname !== cadastroVeiculo ? <HomeRegister /> : null
+      }
       <footer className="footer">
         <div className="container">
           <p className="footer__created">

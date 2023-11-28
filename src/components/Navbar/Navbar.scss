@@ -1,7 +1,7 @@
 @import '../../style/variables.scss';
 
 .navbar {
-  color: $color-dark;
+  color: $color-dark !important;
   background-color: $color-light;
   min-height: 70px;
   
@@ -71,7 +71,7 @@
   .navbar {
     position: fixed;
     width: 100vw;
-    z-index: 1;
+    z-index: 2;
 
     &__hamburger {
       display: block;
@@ -92,7 +92,8 @@
     &__menu {
       position: fixed;
       left: 100%;
-      top: 109px;
+      top: 15vh;
+      height: 85vh;
       gap: 4rem;
       flex-direction: column;
       font-weight: 900;
@@ -103,7 +104,8 @@
       width: 100%;
       padding: 2rem 0;
       transition: 0.3s;
-      z-index: 1;      
+      z-index: 1;     
+      justify-content: center; 
     }
 
       &__line {

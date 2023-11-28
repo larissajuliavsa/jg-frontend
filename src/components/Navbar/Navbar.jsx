@@ -13,10 +13,10 @@ function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === '/';
   const isVeiculos = location.pathname === '/veiculos';
-  // const isLogin = location.pathname === '/login';
+  const isPerfil = location.pathname === '/perfil';
 
   useEffect(() => {
-    if (location.hash === '#aboutUs' || location.key === 'default') {
+    if (location.hash === '#aboutUs') {
       const sectionId = 'aboutUs';
       const section = document.getElementById(sectionId);
 
@@ -64,7 +64,16 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            {handleLocation('Login')}
+            <Link to="/perfil" className={isPerfil ? 'active' : ''}>
+              Perfil
+              <div className="navbar__line" />
+            </Link>
+          </li>
+          <li>
+            <Link to="/login">
+              Login
+              <div className="navbar__line" />
+            </Link>
           </li>
         </ul>
         <button

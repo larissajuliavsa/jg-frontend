@@ -52,7 +52,7 @@ function ProductsCarousel() {
         <Slider {...settings} className="home-products__carousel container">
           {
             products.map((item, index) => (
-              <Link to="/product">
+              <Link to={`/veiculo/${item.id}`}>
                 <Product
                   key={index}
                   index={index}
