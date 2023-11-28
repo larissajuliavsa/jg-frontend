@@ -183,21 +183,26 @@ function Filter({
   const yearMin = 1990;
   const yearMax = 2024;
 
-  const formatMinValue = formatCurrency.format(price[0]);
-  const formatMaxValue = formatCurrency.format(price[1]);
+  // Ensure that price is an array with at least two elements
+  const formattedMinValue = price && price.length >= 2 ? formatCurrency.format(price[0]) : '';
+  const formattedMaxValue = price && price.length >= 2 ? formatCurrency.format(price[1]) : '';
+  const formattedMinYear = year && year.length >= 2 ? year[0] : '';
+  const formattedMaxYear = year && year.length >= 2 ? year[1] : '';
 
   function handleColorClick(color) {
     setSelectedColors((prevColors) => {
       const newColors = { ...prevColors };
       newColors[color] = !newColors[color];
-
-      if (!newColors[color]) {
-        const { [color]: deletedColor, ...rest } = newColors;
-        return rest;
-      }
-
       return newColors;
     });
+  }
+
+  function handleApplyFilters(filteredResults) {
+    localStorage.setItem('price', JSON.stringify(price));
+    localStorage.setItem('year', JSON.stringify(year));
+    localStorage.setItem('selectedColors', JSON.stringify(selectedColors));
+
+    console.log('Aplicar filtros nos produtos:', filteredResults);
   }
 
   function handleSubmit() {
@@ -222,11 +227,11 @@ function Filter({
             onChange={setPrice}
           />
           <p className="filter__range">
-            {formatMinValue}
+            {formattedMinValue}
             {' '}
             até
             {' '}
-            {formatMaxValue}
+            {formattedMaxValue}
           </p>
         </div>
         <div className="filter__item">
@@ -239,11 +244,11 @@ function Filter({
             onChange={setYear}
           />
           <p className="filter__range">
-            {year[0]}
+            {formattedMinYear}
             {' '}
             até
             {' '}
-            {year[1]}
+            {formattedMaxYear}
           </p>
         </div>
         <div className="filter__item">

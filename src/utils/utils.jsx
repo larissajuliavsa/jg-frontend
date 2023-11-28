@@ -9,7 +9,7 @@ export const products = [
     price: '10.000,00',
     image: placeholder,
     description: 'Ar condicionado, direção hidráulica, travas elétricas, freio ABS, vidros elétricos, airbag motorista e passageiro.',
-    color: 'Branco',
+    color: 'branco',
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ export const products = [
     price: '20.500,00',
     image: placeholder,
     description: 'Ar condicionado, direção hidráulica, travas elétricas, freio ABS, vidros elétricos, airbag motorista e passageiro.',
-    color: 'Preto',
+    color: 'preto',
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ export const products = [
     price: '30.000,00',
     image: placeholder,
     description: 'Ar condicionado, direção hidráulica, travas elétricas, freio ABS, vidros elétricos, airbag motorista e passageiro.',
-    color: 'Prata',
+    color: 'prata',
   },
   {
     id: 4,
@@ -36,7 +36,7 @@ export const products = [
     price: '40.500,00',
     image: placeholder,
     description: 'Ar condicionado, direção hidráulica, travas elétricas, freio ABS, vidros elétricos, airbag motorista e passageiro.',
-    color: 'Vermelho',
+    color: 'vermelho',
   },
   {
     id: 5,
@@ -45,7 +45,7 @@ export const products = [
     price: '50.000,00',
     image: placeholder,
     description: 'Ar condicionado, direção hidráulica, travas elétricas, freio ABS, vidros elétricos, airbag motorista e passageiro.',
-    color: 'Laranja',
+    color: 'laranja',
   },
   {
     id: 6,
@@ -54,7 +54,7 @@ export const products = [
     price: '60.500,00',
     image: placeholder,
     description: 'Ar condicionado, direção hidráulica, travas elétricas, freio ABS, vidros elétricos, airbag motorista e passageiro.',
-    color: 'Azul',
+    color: 'azul',
   },
 ];
 

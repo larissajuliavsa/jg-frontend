@@ -13,7 +13,14 @@ function VehiclesBody() {
 
   const [price, setPrice] = useState([priceMin, priceMax]);
   const [year, setYear] = useState([yearMin, yearMax]);
-  const [selectedColors, setSelectedColors] = useState({});
+  const [selectedColors, setSelectedColors] = useState({
+    preto: false,
+    prata: false,
+    branco: false,
+    vermelho: false,
+    azul: false,
+    laranja: false,
+  });
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {

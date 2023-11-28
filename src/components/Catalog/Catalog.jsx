@@ -83,11 +83,11 @@ function Catalog({ filteredResults }) {
   }
 
   function renderPage() {
-    if (filteredResults) {
+    if (filteredResults && filteredResults.length > 0) {
       renderFilteredResults(filteredResults);
     }
 
-    if (searchResults) {
+    if (searchResults && searchResults.length > 0) {
       renderSearchResults(searchResults);
     }
 
@@ -98,7 +98,7 @@ function Catalog({ filteredResults }) {
     <section className="catalog">
       <Filter />
       <div className="catalog__products">
-        {renderPage}
+        {renderPage()}
       </div>
     </section>
   );
