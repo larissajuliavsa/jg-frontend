@@ -98,6 +98,10 @@
   }
 }
 
+.active {
+  border: 1px solid $color-primary;
+}
+
 .slider {
   width: 12.25rem;
   height: 1px;

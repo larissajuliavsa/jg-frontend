@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
@@ -17,41 +18,54 @@ function Catalog() {
     if (query) {
       const lowerCaseQuery = query.toLowerCase();
       const results = products
-        .filter((item) => (
-          item.name.toLowerCase().includes(lowerCaseQuery) || item.price.includes(query)
-        ));
+        .filter((item) => item.name.toLowerCase().includes(lowerCaseQuery) || item.price.includes(query));
       setSearchResults(results);
     } else {
       setSearchResults(null);
     }
   }, [query]);
 
-  function renderCatalog(results) {
+  function renderSearchResults(results) {
     return (
       <>
-        {results ? (
-          results.map((item) => (
-            <Link key={item.id} to={`/veiculo/${item.id}`}>
-              <Product
-                name={item.name}
-                price={item.price}
-                image={item.image}
-                type="catalog"
-              />
-            </Link>
-          ))
-        ) : (
-          products.map((item) => (
-            <Link key={item.id} to={`/veiculo/${item.id}`}>
-              <Product
-                name={item.name}
-                price={item.price}
-                image={item.image}
-                type="catalog"
-              />
-            </Link>
-          ))
-        )}
+        {results.map((item) => (
+          <Link key={item.id} to={`/veiculo/${item.id}`}>
+            <Product
+              name={item.name}
+              price={item.price}
+              color={item.color}
+              image={item.image}
+              year={item.year}
+              type="catalog"
+            />
+          </Link>
+        ))}
+      </>
+    );
+  }
+
+  function renderProducts(product) {
+    return (
+      <>
+        {product.map((item) => (
+          <Link key={item.id} to={`/veiculo/${item.id}`}>
+            <Product
+              name={item.name}
+              price={item.price}
+              color={item.color}
+              image={item.image}
+              year={item.year}
+              type="catalog"
+            />
+          </Link>
+        ))}
+      </>
+    );
+  }
+
+  function renderFilterResult() {
+    return (
+      <>
       </>
     );
   }
@@ -60,7 +74,7 @@ function Catalog() {
     <section className="catalog">
       <Filter />
       <div className="catalog__products">
-        {renderCatalog(searchResults)}
+        {searchResults ? renderSearchResults(searchResults) : renderProducts(products)}
       </div>
     </section>
   );
