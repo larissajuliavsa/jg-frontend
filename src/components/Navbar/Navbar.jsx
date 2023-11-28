@@ -12,7 +12,7 @@ function Navbar() {
 
   const location = useLocation();
   const isHome = location.pathname === '/';
-  const isVeiculos = location.pathname === '/veiculos';
+  const isVehicles = location.pathname === '/veiculos';
   const isPerfil = location.pathname === '/perfil';
 
   useEffect(() => {
@@ -58,7 +58,7 @@ function Navbar() {
             {handleLocation('Sobre nós')}
           </li>
           <li>
-            <Link to="/veiculos" className={isVeiculos ? 'active' : ''}>
+            <Link to="/veiculos" className={isVehicles ? 'active' : ''}>
               Veículos
               <div className="navbar__line" />
             </Link>

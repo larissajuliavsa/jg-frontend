@@ -3,17 +3,19 @@ import React from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import Hero from '../components/Hero/Hero';
 import Footer from '../components/Footer/Footer';
-import Catalog from '../components/Catalog/Catalog';
+// import Catalog from '../components/Catalog/Catalog';
+import VehiclesBody from '../components/VehiclesBody/VehiclesBody';
 
-function Veiculos() {
+function Vehicles() {
   return (
     <>
       <Navbar />
       <Hero />
-      <Catalog />
+      <VehiclesBody />
+      {/* <Catalog /> */}
       <Footer />
     </>
   );
 }
 
-export default Veiculos;
+export default Vehicles;
