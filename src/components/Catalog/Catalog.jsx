@@ -1,15 +1,16 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable import/no-extraneous-dependencies */
+// import Filter from '../Filter/Filter';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Filter from '../Filter/Filter';
 import './Catalog.scss';
 import { products } from '../../utils/utils';
 import Product from '../Product/Product';
 
-function Catalog({ filteredResults }) {
+function Catalog() {
   const location = useLocation();
   const [searchResults, setSearchResults] = useState(null);
   const query = new URLSearchParams(location.search).get('query');
@@ -44,59 +45,55 @@ function Catalog({ filteredResults }) {
     );
   }
 
-  function renderProducts(product) {
-    return (
-      <>
-        {product.map((item) => (
-          <Link key={item.id} to={`/veiculo/${item.id}`}>
-            <Product
-              name={item.name}
-              price={item.price}
-              color={item.color}
-              image={item.image}
-              year={item.year}
-              type="catalog"
-            />
-          </Link>
-        ))}
-      </>
-    );
+  function renderProducts(products) {
+    return products.map((item) => (
+      <Link key={item.id} to={`/veiculo/${item.id}`}>
+        <Product
+          name={item.name}
+          price={item.price}
+          color={item.color}
+          image={item.image}
+          year={item.year}
+          type="catalog"
+        />
+      </Link>
+    ));
   }
 
-  function renderFilteredResults(results) {
-    return (
-      <>
-        {results.map((item) => (
-          <Link key={item.id} to={`/veiculo/${item.id}`}>
-            <Product
-              name={item.name}
-              price={item.price}
-              color={item.color}
-              image={item.image}
-              year={item.year}
-              type="catalog"
-            />
-          </Link>
-        ))}
-      </>
-    );
-  }
+  // function renderFilteredResults(results) {
+  //   return (
+  //     <>
+  //       {results.map((item) => (
+  //         <Link key={item.id} to={`/veiculo/${item.id}`}>
+  //           <Product
+  //             name={item.name}
+  //             price={item.price}
+  //             color={item.color}
+  //             image={item.image}
+  //             year={item.year}
+  //             type="catalog"
+  //           />
+  //         </Link>
+  //       ))}
+  //     </>
+  //   );
+  // }
 
   function renderPage() {
-    if (filteredResults && filteredResults.length > 0) {
-      renderFilteredResults(filteredResults);
-    }
+    // if (filteredResults && filteredResults.length > 0) {
+    //   return renderFilteredResults(filteredResults);
+    // }
 
     if (searchResults && searchResults.length > 0) {
-      renderSearchResults(searchResults);
+      return renderSearchResults(searchResults);
     }
 
-    renderProducts(products);
+    return renderProducts(products);
   }
 
   return (
     <section className="catalog">
-      <Filter />
+
       <div className="catalog__products">
         {renderPage()}
       </div>
