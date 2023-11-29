@@ -1,45 +1,81 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { products } from '../../utils/utils';
 import './Search.scss';
 import search from '../../assets/images/search.svg';
 
 function filterQuery(query, product) {
   if (query.trim() === '') {
-    return null;
+    return [];
   }
 
-  const result = product
-    .filter((item) => item.name.toLowerCase().includes(query) || item.price.includes(query));
+  const lowercaseQuery = query.toLowerCase();
 
-  if (result.length === 0) {
-    return (
-      <p>Não encontramos este produto</p>
-    );
-  }
-
-  return (
-    result.map((item) => (
-      <li className="search__item">
-        <Link
-          to={`/veiculo/${item.id}`}
-        >
-          {item.name}
-          {' '}
-          {item.price}
-        </Link>
-      </li>
-    ))
+  const result = product.filter(
+    (item) => item.model.toLowerCase().includes(lowercaseQuery)
+      || item.make.toLowerCase().includes(lowercaseQuery),
   );
+
+  return result;
 }
 
 function Search() {
   const [query, setQuery] = useState('');
-  const result = filterQuery(query, products);
+  const [data, setData] = useState(null);
+  const [filteredResults, setFilteredResults] = useState([]);
   const navigate = useNavigate();
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8081/api/vehicles/all', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      console.error('erro: ', err);
+    }
+  };
+
+  const fetchFilter = async (make) => {
+    try {
+      const response = await fetch(`http://localhost:8081/api/vehicles/filter?make=${make}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      console.error('erro: ', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      const filtered = filterQuery(query, data);
+      setFilteredResults(filtered);
+    }
+  }, [query, data]);
+
   function handleClickIcon() {
+    // http://localhost:8081/api/vehicles/filter?make=
     navigate(`/veiculos/resultado?query=${encodeURIComponent(query)}`);
     setQuery('');
   }
@@ -61,7 +97,18 @@ function Search() {
         </button>
       </div>
       <ul className="search__result">
-        {result}
+        {filteredResults.length === 0 && query.trim() !== '' && (
+        <p>Não encontramos este produto</p>
+        )}
+        {filteredResults.map((item) => (
+          <li className="search__item" key={item.id}>
+            <Link to={`/veiculo/${item.id}`}>
+              {item.model}
+              {' '}
+              {item.year}
+            </Link>
+          </li>
+        ))}
       </ul>
     </section>
   );
