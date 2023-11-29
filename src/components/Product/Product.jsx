@@ -4,7 +4,7 @@ import './Product.scss';
 
 function Product(props) {
   const {
-    index, name, price, image, type,
+    index, name, price, color, year, image, type,
   } = props;
 
   return (
@@ -22,7 +22,12 @@ function Product(props) {
               R$
               {' '}
               {price}
-              {' '}
+            </p>
+            <p className="products__desc">
+              {color}
+            </p>
+            <p className="products__desc">
+              {year}
             </p>
           </>
         ) : ''

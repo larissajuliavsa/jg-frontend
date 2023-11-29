@@ -1,11 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import React, { useState } from 'react';
 import './FormProduct.scss';
 
 function FormProduct() {
+  const [selectedFile, setSelectedFile] = useState('');
+
+  function handleClick() {
+    console.log('✨  selectedFile:', selectedFile);
+
+    console.log('testando');
+  }
   return (
     <section className="form-product">
-
       <div className="form-product--align">
         <h1 className="form-product__title">Cadastrar Veículo</h1>
         <div className="form-product__inputs">
@@ -80,11 +86,23 @@ function FormProduct() {
           </label>
           <label htmlFor="formFile" className="form-product__file">
             <span>Imagem</span>
-            <input className="form-control" type="file" id="formFile" />
+            <input
+              className="form-control"
+              type="file"
+              id="formFile"
+              value={selectedFile}
+              onChange={(e) => setSelectedFile(e.target.files[0])}
+            />
           </label>
         </div>
         <div className="form-product__button">
-          <button type="submit" className="button--primary">cadastrar</button>
+          <button
+            type="submit"
+            className="button--primary"
+            onClick={handleClick}
+          >
+            cadastrar
+          </button>
         </div>
       </div>
     </section>

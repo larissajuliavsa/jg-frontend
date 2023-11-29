@@ -15,23 +15,21 @@ function Home() {
       try {
         const response = await fetch('http://localhost:8081/api/vehicles/1', {
           method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
-
-        // console.log('response:', response);
 
         if (!response.ok) {
           throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
         }
 
-        const text = await response.text();
-        // console.log('response text:', text);
-
-        const result = JSON.parse(text);
-        // console.log('result:', result);
+        const json = await response.json();
+        const result = JSON.parse(json);
 
         setData(result);
       } catch (err) {
-        console.error(err);
+        console.error('err: ', err);
       }
     };
 
