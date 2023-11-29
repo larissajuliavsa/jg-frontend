@@ -60,7 +60,7 @@ function ProductBody() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [id]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -174,39 +174,42 @@ function ProductBody() {
           className="form-product__radio"
         >
           <span>Combustível</span>
-          <label htmlFor="gasolina" className="form-product__label">
-            <input
-              type="radio"
-              id="gasolina"
-              value="gasolina"
-              name="fuelType"
-              onChange={handleChange}
-              checked={editedFields.fuelType === 'Gasolina'}
-            />
-            Gasolina
-          </label>
-          <label htmlFor="flex" className="form-product__label">
-            <input
-              type="radio"
-              id="flex"
-              value="flex"
-              name="fuelType"
-              onChange={handleChange}
-              checked={editedFields.fuelType === 'Flex'}
-            />
-            Flex
-          </label>
-          <label htmlFor="diesel" className="form-product__label">
-            <input
-              type="radio"
-              id="diesel"
-              value="diesel"
-              name="fuelType"
-              onChange={handleChange}
-              checked={editedFields.fuelType === 'Diesel'}
-            />
-            Diesel
-          </label>
+          <div className="form-product__radio--align">
+            <label htmlFor="gasolina" className="form-product__label">
+              <input
+                type="radio"
+                id="gasolina"
+                value="gasolina"
+                name="fuelType"
+                onChange={handleChange}
+                checked={editedFields.fuelType === 'Gasolina'}
+              />
+              Gasolina
+            </label>
+            <label htmlFor="flex" className="form-product__label">
+              <input
+                type="radio"
+                id="flex"
+                value="flex"
+                name="fuelType"
+                onChange={handleChange}
+                checked={editedFields.fuelType === 'Flex'}
+              />
+              Flex
+            </label>
+            <label htmlFor="diesel" className="form-product__label">
+              <input
+                type="radio"
+                id="diesel"
+                value="diesel"
+                name="fuelType"
+                onChange={handleChange}
+                checked={editedFields.fuelType === 'Diesel'}
+              />
+              Diesel
+            </label>
+
+          </div>
         </div>
         <label
           htmlFor="transmission"
@@ -225,7 +228,6 @@ function ProductBody() {
             <option value="Manual">Manual</option>
           </select>
         </label>
-
         <label
           htmlFor="engineSize"
           className="form-product__select"
@@ -243,6 +245,19 @@ function ProductBody() {
             <option value="1.8">1.8</option>
             <option value="2.5">2.5</option>
           </select>
+        </label>
+        <label
+          htmlFor="engineSize"
+          className="form-product__textarea"
+        >
+          <span>Descrição</span>
+          <textarea
+            id="description"
+            name="description"
+            className="form-textarea"
+            onChange={handleChange}
+            value={editedFields.description}
+          />
         </label>
       </section>
     );
@@ -274,7 +289,7 @@ function ProductBody() {
               <button
                 type="button"
                 onClick={handleSave}
-                className="button--outline"
+                className="button--primary"
               >
                 salvar
               </button>
@@ -330,7 +345,13 @@ function ProductBody() {
                   </div>
                   <div className="product__desc">
                     <p className="product__subtitle">Descrição</p>
-                    {/* <p>{item.description}</p> */}
+                    <p>
+                      Opcionais: Porta-copos, Farol de neblina, Direção Elétrica,
+                      Comando de áudio no volante, Banco bi-partido, Controle de estabilidade,
+                      Distribuição eletrônica de frenagem, Kit Multimídia, MP3 Player,
+                      Pára-choques na cor do veículo.
+
+                    </p>
                   </div>
                 </div>
                 <div className="product__buttons">

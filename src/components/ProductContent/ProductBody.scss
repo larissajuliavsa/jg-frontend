@@ -22,6 +22,7 @@
     width: fit-content;
     margin: 0 auto;
     gap: 11rem;
+    text-transform: capitalize;
   }
 
   &__list {
@@ -80,10 +81,11 @@
 }
 
 .editing {
-  max-width: 25rem;
+  max-width: 28rem;
+  padding: 2rem;
   width: 100%;
-  background-color: red;
   margin: 0 auto;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .button--outline {
@@ -91,6 +93,16 @@
   &:hover {
     color: $color-light !important;
   }
+}
+
+input[type=text],
+input[type=number]{
+  color: $color-dark;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
 }
 
 @media(max-width: 1101px) {

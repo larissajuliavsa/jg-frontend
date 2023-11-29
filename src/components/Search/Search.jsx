@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Search.scss';
 import search from '../../assets/images/search.svg';
 
@@ -45,6 +45,21 @@ function Search() {
     }
   };
 
+  // const fetchId = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:8081/api/vehicles/${id}`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     const result = await response.json();
+  //     setData(result);
+  //   } catch (err) {
+  //     console.error('erro: ', err);
+  //   }
+  // };
+
   const fetchFilter = async (query) => {
     const lowercaseQuery = query.toLowerCase();
     const filteredData = data.filter(
@@ -65,7 +80,7 @@ function Search() {
       });
 
       const result = await response.json();
-      return result;
+      return setData(result);
     } catch (err) {
       console.error('erro: ', err);
       return [];
@@ -91,6 +106,11 @@ function Search() {
     }
   }
 
+  function handleItemClick(id) {
+    navigate(`/veiculo/${id.toString()}`);
+    setQuery('');
+  }
+
   return (
     <section className="search">
       <div className="search--align">
@@ -111,15 +131,20 @@ function Search() {
         {filteredResults.length === 0 && query.trim() !== '' && (
         <p>Não encontramos este produto</p>
         )}
+
         {filteredResults.map((item) => (
-          <li className="search__item" key={item.id}>
-            <Link to={`/veiculo/${item.id}`}>
-              {item.model}
-              {' '}
-              {item.year}
-            </Link>
-          </li>
+          <button
+            className="search__item"
+            key={item.id}
+            onClick={() => handleItemClick(item.id)}
+            type="button"
+          >
+            {item.model}
+            {' '}
+            {item.year}
+          </button>
         ))}
+
       </ul>
     </section>
   );
