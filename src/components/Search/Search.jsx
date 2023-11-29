@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -44,7 +45,17 @@ function Search() {
     }
   };
 
-  const fetchFilter = async (make) => {
+  const fetchFilter = async (query) => {
+    const lowercaseQuery = query.toLowerCase();
+    const filteredData = data.filter(
+      (item) => item.model.toLowerCase().includes(lowercaseQuery)
+        || item.make.toLowerCase().includes(lowercaseQuery),
+    );
+    if (filteredData.length === 0) {
+      return [];
+    }
+    const { make } = filteredData[0];
+
     try {
       const response = await fetch(`http://localhost:8081/api/vehicles/filter?make=${make}`, {
         method: 'GET',
@@ -53,13 +64,11 @@ function Search() {
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
-      }
       const result = await response.json();
-      setData(result);
+      return result;
     } catch (err) {
       console.error('erro: ', err);
+      return [];
     }
   };
 
@@ -74,10 +83,12 @@ function Search() {
     }
   }, [query, data]);
 
-  function handleClickIcon() {
-    // http://localhost:8081/api/vehicles/filter?make=
-    navigate(`/veiculos/resultado?query=${encodeURIComponent(query)}`);
-    setQuery('');
+  async function handleClickIcon() {
+    const filter = await fetchFilter(query);
+    if (filter) {
+      navigate(`/veiculos/resultado?query=${encodeURIComponent(query)}`);
+      setQuery('');
+    }
   }
 
   return (
