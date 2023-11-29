@@ -2,14 +2,16 @@
 import React from 'react';
 import './Product.scss';
 
+import placeholder from '../../assets/images/image-placeholder.svg';
+
 function Product(props) {
   const {
-    index, name, price, color, year, image, type,
+    index, name, price, color, year, type,
   } = props;
 
   return (
     <div className="products__item" key={name}>
-      <img className="products__img" src={image} alt={name} />
+      <img className="products__img" src={placeholder} alt={name} />
       {
         type === 'catalog' ? (
           <>

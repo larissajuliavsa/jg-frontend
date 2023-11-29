@@ -10,7 +10,7 @@ function Login() {
       placeholderText: 'email@email.com',
     },
     {
-      name: 'senha',
+      name: 'password',
       type: 'password',
       placeholder: false,
       placeholderText: '',

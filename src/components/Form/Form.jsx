@@ -19,20 +19,60 @@ function Form(props) {
   const formClass = title === 'Login' ? 'form__login' : 'form__cadastro';
   const formType = title;
 
+  const fetchRegister = async (body) => {
+    try {
+      const response = await fetch('http://localhost:8081/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      return await response.json();
+    } catch (err) {
+      console.error('Erro na requisição: ', err);
+      throw err;
+    }
+  };
+
+  const fetchLogin = async (body) => {
+    console.log('✨  body:', body);
+
+    try {
+      const response = await fetch('http://localhost:8081/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      return await response.json();
+    } catch (err) {
+      console.error('Erro na requisição: ', err);
+      throw err;
+    }
+  };
+
+  async function validateLogin() {
+    const { email, password } = JSON.parse(localStorage.getItem('userData'));
+
+    if (form.email === email && form.password === password) {
+      const { accessToken } = await fetchLogin(form);
+      localStorage.setItem('token', accessToken);
+      navigate('/');
+    }
+  }
+
   function handleChange(e) {
     const { value, name } = e.target;
+
     setForm({
       ...form,
       [name]: value,
     });
     setEmptyFields((prev) => prev.filter((field) => field !== name));
-  }
-
-  function validateLogin() {
-    const { email, senha } = JSON.parse(localStorage.getItem('userData'));
-    if (form.email === email && form.senha === senha) {
-      navigate('/');
-    }
   }
 
   function handleClick(e) {
@@ -46,11 +86,14 @@ function Form(props) {
 
     if (checkFields.length === 0) {
       if (formType === 'Cadastro') {
+        const body = { ...form, roles: ['ROLE_SELLER'] };
         navigate('/');
-        localStorage.setItem('userData', JSON.stringify(form));
+        localStorage.setItem('userData', JSON.stringify(body));
+        fetchRegister(body);
       }
 
       if (formType === 'Login') {
+        console.log('oi');
         validateLogin();
       }
     }
@@ -78,6 +121,7 @@ function Form(props) {
                 <input
                   type={item.type}
                   id={item.name}
+                  value={item.value}
                   name={item.name}
                   placeholder={item.placeholder ? item.placeholderText : ''}
                   className={`${

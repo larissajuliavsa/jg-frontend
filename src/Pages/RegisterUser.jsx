@@ -4,7 +4,7 @@ import Form from '../components/Form/Form';
 function RegisterUser() {
   const inputs = [
     {
-      name: 'nome',
+      name: 'name',
       type: 'text',
       placeholder: true,
       placeholderText: 'Maria José da Silva',
@@ -22,13 +22,13 @@ function RegisterUser() {
       placeholderText: 'email@email.com',
     },
     {
-      name: 'senha',
+      name: 'password',
       type: 'password',
       placeholder: false,
       placeholderText: '',
     },
     {
-      name: 'vendedor',
+      name: 'roles',
       type: 'radio',
       placeholder: false,
       placeholderText: '',
