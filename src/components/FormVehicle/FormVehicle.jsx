@@ -355,8 +355,8 @@ function FormVehicle() {
               className="form-select"
               onChange={handleChange}
             >
-              <option value="automática">Automático</option>
-              <option value="automatizada">Automatizado</option>
+              <option value="automático">Automático</option>
+              <option value="automatizado">Automatizado</option>
               <option value="manual">Manual</option>
             </select>
           </label>

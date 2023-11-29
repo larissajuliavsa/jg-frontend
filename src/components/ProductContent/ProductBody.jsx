@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ImagesCarousel from '../ImagesCarousel/ImagesCarousel';
 import './ProductBody.scss';
+import { formatCurrency, formatNumberWithDot } from '../../utils/utils';
 
 function ProductBody() {
   const { id } = useParams();
   const [data, setData] = useState(null);
+  const [editedFields, setEditedFields] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -17,19 +20,53 @@ function ProductBody() {
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
-      }
-
       const result = await response.json();
       setData([result]);
+      setEditedFields(result);
     } catch (err) {
       console.error('erro: ', err);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  function handleEdit() {
+    setIsEditing(true);
+  }
+
+  function handleSave() {
+    const fetchSave = async () => {
+      try {
+        const response = await fetch(`http://localhost:8081/api/vehicles/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const result = await response.json();
+        if (result) {
+          setIsEditing(false);
+          fetchData();
+        }
+      } catch (err) {
+        console.error('erro: ', err);
+      }
+    };
+
+    setIsEditing(false);
+    fetchSave();
+  }
+
+  function handleFieldChange(e) {
+    const { name, value } = e.target;
+    setEditedFields({
+      ...editedFields,
+      [name]: value,
+    });
+  }
 
   return (
     <section className="product">
@@ -48,9 +85,7 @@ function ProductBody() {
                   {item.year}
                 </h1>
                 <h1 className="product__price">
-                  R$
-                  {' '}
-                  {item.price}
+                  {formatCurrency(item.price.toString())}
                   <div className="product__line" />
                 </h1>
               </div>
@@ -67,7 +102,7 @@ function ProductBody() {
                     </li>
                     <li className="product__item">
                       <p className="product__subtitle">KM</p>
-                      <span>{item.mileage}</span>
+                      <span>{formatNumberWithDot(item.mileage)}</span>
                     </li>
                     <li className="product__item">
                       <p className="product__subtitle">Combustível</p>
@@ -79,7 +114,7 @@ function ProductBody() {
                     </li>
                     <li className="product__item">
                       <p className="product__subtitle">Motor</p>
-                      <span>{item.engineSize}</span>
+                      <span>{item.engineSize === 1 ? '1.0' : item.engineSize}</span>
                     </li>
                   </ul>
                 </div>
@@ -87,6 +122,22 @@ function ProductBody() {
                   <p className="product__subtitle">Descrição</p>
                   {/* <p>{item.description}</p> */}
                 </div>
+              </div>
+              <div className="product__buttons">
+                <button
+                  type="button"
+                  onClick={handleEdit}
+                  className="button--outline"
+                >
+                  editar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="button--primary"
+                >
+                  salvar
+                </button>
               </div>
             </section>
           </>
