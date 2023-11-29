@@ -85,7 +85,37 @@ export const productImage = [
   },
 ];
 
-export const formatCurrency = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-});
+//  const formatCurrency = new Intl.NumberFormat('pt-BR', {
+//   style: 'currency',
+//   currency: 'BRL',
+// });
+
+export function formatCurrency(valor) {
+  const valorLimpo = valor.replace(/\./g, '');
+  const temVirgula = valorLimpo.includes(',');
+  if (temVirgula) {
+    const partes = valorLimpo.split(',');
+    const parteInteira = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const parteDecimal = partes[1].padEnd(2, '0').slice(0, 2);
+    return `R$ ${parteInteira},${parteDecimal}`;
+  }
+  const parteInteira = valorLimpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return `R$ ${parteInteira},00`;
+}
+
+export function formatNumberWithDot(number) {
+  if (typeof number === 'string' && number.includes('.')) {
+    return number;
+  }
+
+  const numStr = String(number).replace(/\./g, '');
+
+  const parts = [];
+  let i = numStr.length;
+  while (i > 0) {
+    i -= 3;
+    parts.unshift(numStr.slice(Math.max(0, i), i + 3));
+  }
+
+  return parts.join('.');
+}

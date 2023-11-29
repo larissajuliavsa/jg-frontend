@@ -25,9 +25,9 @@ function Home() {
         }
 
         const json = await response.json();
-        const result = JSON.parse(json);
+        console.log('✨  json:', json);
 
-        setData(result);
+        setData(json);
       } catch (err) {
         console.error('err: ', err);
       }
