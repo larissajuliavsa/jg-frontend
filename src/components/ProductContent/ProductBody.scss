@@ -25,7 +25,7 @@
   }
 
   &__list {
-    width: 17rem;
+    max-width: 17rem;
   }
 
   &__item {
@@ -33,6 +33,7 @@
     justify-content: space-between;
     margin-bottom: 2rem;
     text-transform: capitalize;
+    gap: 5rem;
   }
   
   &__subtitle {
@@ -49,9 +50,9 @@
   &__body {
     @include center-row;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 9rem;
+    gap: 2rem;
     max-width: 60rem;
     width: 100%;
     padding: 2rem 3rem;
@@ -59,12 +60,24 @@
   }
   
   &__desc {
-    width: 26rem;
+    width: 20rem;
     line-height: normal;
 
     .product__subtitle {
       margin-bottom: 2rem;
     }
+  }
+
+  &__buttons {
+    @include center-row;
+    gap: 2rem;
+  }
+}
+
+.button--outline {
+  color: $color-primary !important;
+  &:hover {
+    color: $color-light !important;
   }
 }
 
@@ -91,5 +104,11 @@
       gap: 6rem;
       width: 80%;
     }
+
+    &__item {
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 }
+
