@@ -1,16 +1,19 @@
+/* eslint-disable no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import './FormVehicle.scss';
-// import { formatCurrency, formatNumberWithDot } from '../../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
 function FormVehicle() {
+  const navigate = useNavigate();
   const [files, setFiles] = useState();
+  const [success, setSuccess] = useState();
   const [form, setForm] = useState({
     make: '',
     model: '',
     color: 'preto',
-    engineSize: '1.0',
+    engineSize: 1.0,
     fuelType: '',
     mileage: '',
     price: '',
@@ -31,6 +34,73 @@ function FormVehicle() {
     year: false,
     formFile: false,
   });
+
+  const fetchData = async (body, token) => {
+    try {
+      const response = await fetch('http://localhost:8081/api/vehicles/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+      const results = await response.json();
+      setSuccess(true);
+      return results;
+    } catch (err) {
+      console.error('erro: ', err);
+    }
+  };
+
+  // const fetchImage = async (id, body) => {
+  //   try {
+  //     const formData = new FormData();
+  //     body.forEach((file, index) => {
+  //       formData.append(`image${index + 1}`, file);
+  //     });
+
+  //     const response = await fetch(`http://localhost:8081/api/vehicles/uploadImage/${id}`, {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+
+  //     console.log('✨  response:', response);
+
+  //     // const results = await response.json();
+  //     return response;
+  //   } catch (err) {
+  //     console.error('erro: ', err);
+  //   }
+  // };
+
+  async function fetchImages(id, files, token) {
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i += 1) {
+      formData.append('imagens[]', files[i]);
+    }
+
+    const url = `http://localhost:8081/api/vehicles/uploadImage/${id}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Imagens enviadas com sucesso:', data);
+    } else {
+      console.error('Erro ao enviar imagens:', response.status);
+    }
+  }
 
   function handleChange(e) {
     const { value, name, type } = e.target;
@@ -74,48 +144,61 @@ function FormVehicle() {
     });
   }
 
-  const fetchData = async (body, token) => {
-    try {
-      const response = await fetch('http://localhost:8081/api/vehicles/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
-      }
-      const result = await response.json();
-      return result;
-    } catch (err) {
-      console.error('erro: ', err);
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFiles(Array.from(e.target.files));
     }
   };
 
-  function handleSubmit() {
-    let hasError = false;
+  function isStringEmpty(value) {
+    return typeof value === 'string' && value.trim() === '';
+  }
+
+  function isNumericFieldEmpty(value) {
+    return value === undefined || value === null || value === '';
+  }
+
+  function validateForm() {
     const errors = {};
 
-    Object.keys(form).forEach((key) => {
-      if (form[key].trim() === '') {
+    Object.entries(form).forEach(([key, value]) => {
+      if (
+        isStringEmpty(value)
+      || (['year', 'price', 'mileage', 'engineSize'].includes(key)
+        && isNumericFieldEmpty(value))
+      ) {
         errors[key] = true;
-        hasError = true;
       }
     });
 
-    if (!files || files.length === 0) {
-      errors.file = true;
-      hasError = true;
-    }
+    return errors;
+  }
+
+  async function handleSubmit() {
+    const token = localStorage.getItem('token');
+    const formErrors = validateForm();
+    const hasError = Object.keys(formErrors).length > 0;
+    console.log('✨  files:', files);
 
     if (hasError) {
-      setInputErrors({ ...inputErrors, ...errors });
+      setInputErrors({ ...inputErrors, ...formErrors });
+      return;
     }
 
-    fetchData(JSON.stringify(form));
+    if (!files || files.length === 0) {
+      formErrors.file = true;
+      setInputErrors({ ...inputErrors, ...formErrors });
+      return;
+    }
+
+    const formToSend = { ...form };
+
+    const { id } = await fetchData(formToSend, token);
+    console.log('✨  vehicle:', id);
+    // fetchImage(id, files);
+    fetchImages(id, files, token);
+
+    // if (vehicle) navigate('/veiculos');
   }
 
   return (
@@ -136,16 +219,6 @@ function FormVehicle() {
                 onChange={handleChange}
               />
               Carro
-            </label>
-            <label htmlFor="moto" className="form-product__label">
-              <input
-                type="radio"
-                id="moto"
-                value="moto"
-                name="vehicleType"
-                onChange={handleChange}
-              />
-              Moto
             </label>
           </div>
           <label
@@ -282,8 +355,8 @@ function FormVehicle() {
               className="form-select"
               onChange={handleChange}
             >
-              <option value="automatico">Automático</option>
-              <option value="automatizado">Automatizado</option>
+              <option value="automática">Automático</option>
+              <option value="automatizada">Automatizado</option>
               <option value="manual">Manual</option>
             </select>
           </label>
@@ -315,11 +388,7 @@ function FormVehicle() {
               accept="image/jpg, image/jpeg, image/png"
               id="formFile"
               name="formFile"
-              onChange={(e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  setFiles(Array.from(e.target.files));
-                }
-              }}
+              onChange={handleFileChange}
               multiple
             />
           </label>
@@ -329,8 +398,9 @@ function FormVehicle() {
             type="submit"
             className="button--primary"
             onClick={handleSubmit}
+            disabled={success}
           >
-            cadastrar
+            {success ? 'cadastrado!' : 'cadastrar'}
           </button>
         </div>
       </div>
