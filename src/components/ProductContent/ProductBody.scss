@@ -70,8 +70,20 @@
 
   &__buttons {
     @include center-row;
+    justify-content: center;
     gap: 2rem;
   }
+}
+
+.update {
+  display: none;
+}
+
+.editing {
+  max-width: 25rem;
+  width: 100%;
+  background-color: red;
+  margin: 0 auto;
 }
 
 .button--outline {

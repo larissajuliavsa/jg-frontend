@@ -178,7 +178,6 @@ function FormVehicle() {
     const token = localStorage.getItem('token');
     const formErrors = validateForm();
     const hasError = Object.keys(formErrors).length > 0;
-    console.log('✨  files:', files);
 
     if (hasError) {
       setInputErrors({ ...inputErrors, ...formErrors });
@@ -194,11 +193,9 @@ function FormVehicle() {
     const formToSend = { ...form };
 
     const { id } = await fetchData(formToSend, token);
-    console.log('✨  vehicle:', id);
-    // fetchImage(id, files);
     fetchImages(id, files, token);
 
-    // if (vehicle) navigate('/veiculos');
+    if (id) navigate('/veiculos');
   }
 
   return (
