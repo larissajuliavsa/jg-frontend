@@ -6,14 +6,42 @@
 // import Filter from '../Filter/Filter';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import './Catalog.scss';
 import { products } from '../../utils/utils';
 import Product from '../Product/Product';
+import './Catalog.scss';
 
 function Catalog() {
   const location = useLocation();
   const [searchResults, setSearchResults] = useState(null);
+  const [data, setData] = useState(null);
   const query = new URLSearchParams(location.search).get('query');
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8081/api/vehicles/all', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      setData(result);
+    } catch (err) {
+      console.error('erro: ', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log('🚀 ~ data:', data);
 
   useEffect(() => {
     if (query) {
@@ -35,7 +63,6 @@ function Catalog() {
               name={item.name}
               price={item.price}
               color={item.color}
-              image={item.image}
               year={item.year}
               type="catalog"
             />
@@ -46,13 +73,12 @@ function Catalog() {
   }
 
   function renderProducts(products) {
-    return products.map((item) => (
+    return products && products.map((item) => (
       <Link key={item.id} to={`/veiculo/${item.id}`}>
         <Product
-          name={item.name}
+          name={item.model}
           price={item.price}
           color={item.color}
-          image={item.image}
           year={item.year}
           type="catalog"
         />
@@ -88,7 +114,7 @@ function Catalog() {
       return renderSearchResults(searchResults);
     }
 
-    return renderProducts(products);
+    return renderProducts(data);
   }
 
   return (

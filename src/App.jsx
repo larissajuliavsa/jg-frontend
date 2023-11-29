@@ -4,10 +4,10 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import Vehicles from './Pages/Vehicles';
-import Product from './Pages/Product';
+import Vehicle from './Pages/Vehicle';
 import Login from './Pages/Login';
 import RegisterUser from './Pages/RegisterUser';
-import RegisterProduct from './Pages/RegisterProduct';
+import RegisterVehicle from './Pages/RegisterVehicle';
 import Profile from './Pages/Profile';
 import SearchResult from './Pages/SearchResult';
 
@@ -21,8 +21,8 @@ function App() {
         <Route path="/perfil" element={<Profile />} />
         <Route path="/veiculos" element={<Vehicles />} />
         <Route path="/veiculos/resultado" element={<SearchResult />} />
-        <Route path="/veiculo/:id" element={<Product />} />
-        <Route path="/veiculo/cadastro" element={<RegisterProduct />} />
+        <Route path="/veiculo/:id" element={<Vehicle />} />
+        <Route path="/veiculo/cadastro" element={<RegisterVehicle />} />
       </Routes>
     </BrowserRouter>
   );

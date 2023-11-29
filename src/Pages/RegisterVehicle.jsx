@@ -1,16 +1,16 @@
 import React from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
-import FormProduct from '../components/FormProduct/FormProduct';
+import FormVehicle from '../components/FormVehicle/FormVehicle';
 
-function RegisterProduct() {
+function RegisterVehicle() {
   return (
     <>
       <Navbar />
-      <FormProduct />
+      <FormVehicle />
       <Footer />
     </>
   );
 }
 
-export default RegisterProduct;
+export default RegisterVehicle;

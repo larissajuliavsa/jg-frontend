@@ -1,45 +1,131 @@
 /* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
-import './FormProduct.scss';
-import { formatCurrency, formatNumberWithDot } from '../../utils/utils';
+import './FormVehicle.scss';
+// import { formatCurrency, formatNumberWithDot } from '../../utils/utils';
 
-function FormProduct() {
+function FormVehicle() {
   const [files, setFiles] = useState();
-  const [form, setForm] = useState();
+  const [form, setForm] = useState({
+    make: '',
+    model: '',
+    color: 'preto',
+    engineSize: '1.0',
+    fuelType: '',
+    mileage: '',
+    price: '',
+    transmission: 'automatico',
+    vehicleType: '',
+    year: '',
+  });
+  const [inputErrors, setInputErrors] = useState({
+    make: false,
+    model: false,
+    color: false,
+    engineSize: false,
+    fuelType: false,
+    mileage: false,
+    price: false,
+    transmission: false,
+    vehicleType: false,
+    year: false,
+    formFile: false,
+  });
 
   function handleChange(e) {
-    const { value, name } = e.target;
+    const { value, name, type } = e.target;
     let updatedValue = value;
 
-    if (name === 'price') {
-      updatedValue = formatCurrency(value);
+    if (type === 'file') {
+      const hasSelectedFiles = e.target.files && e.target.files.length > 0;
+
+      setFiles(hasSelectedFiles ? Array.from(e.target.files) : undefined);
+      setInputErrors({
+        ...inputErrors,
+        [name]: !hasSelectedFiles,
+      });
+
+      return;
     }
 
     if (name === 'year') {
-      updatedValue = value.toString();
+      updatedValue = Number(value);
+    }
+
+    if (name === 'price') {
+      updatedValue = Number(value);
     }
 
     if (name === 'mileage') {
-      updatedValue = formatNumberWithDot(value);
+      updatedValue = Number(value);
+    }
+    if (name === 'engineSize') {
+      updatedValue = Number(value);
     }
 
     setForm({
       ...form,
       [name]: updatedValue,
     });
+
+    setInputErrors({
+      ...inputErrors,
+      [name]: false,
+    });
   }
 
-  function handleClick() {
-    console.log('✨  form:', form);
-    console.log('✨  files:', files);
+  const fetchData = async (body, token) => {
+    try {
+      const response = await fetch('http://localhost:8081/api/vehicles/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+      const result = await response.json();
+      return result;
+    } catch (err) {
+      console.error('erro: ', err);
+    }
+  };
+
+  function handleSubmit() {
+    let hasError = false;
+    const errors = {};
+
+    Object.keys(form).forEach((key) => {
+      if (form[key].trim() === '') {
+        errors[key] = true;
+        hasError = true;
+      }
+    });
+
+    if (!files || files.length === 0) {
+      errors.file = true;
+      hasError = true;
+    }
+
+    if (hasError) {
+      setInputErrors({ ...inputErrors, ...errors });
+    }
+
+    fetchData(JSON.stringify(form));
   }
+
   return (
     <section className="form-product">
       <div className="form-product--align">
         <h1 className="form-product__title">Cadastrar Veículo</h1>
         <div className="form-product__inputs">
-          <div className="form-product__radio">
+          <div
+            className={`form-product__radio ${inputErrors.vehicleType ? 'error' : ''}`}
+          >
             <span>Tipo de veículo</span>
             <label htmlFor="carro" className="form-product__label">
               <input
@@ -62,7 +148,10 @@ function FormProduct() {
               Moto
             </label>
           </div>
-          <label htmlFor="make" className="form-product__text">
+          <label
+            htmlFor="make"
+            className={`form-product__text ${inputErrors.make ? 'error' : ''}`}
+          >
             <span>Marca</span>
             <input
               type="text"
@@ -72,7 +161,10 @@ function FormProduct() {
               onChange={handleChange}
             />
           </label>
-          <label htmlFor="model" className="form-product__text">
+          <label
+            htmlFor="model"
+            className={`form-product__text ${inputErrors.model ? 'error' : ''}`}
+          >
             <span>Modelo</span>
             <input
               type="text"
@@ -82,7 +174,10 @@ function FormProduct() {
               onChange={handleChange}
             />
           </label>
-          <label htmlFor="year" className="form-product__text">
+          <label
+            htmlFor="year"
+            className={`form-product__text ${inputErrors.year ? 'error' : ''}`}
+          >
             <span>Ano</span>
             <input
               type="number"
@@ -94,7 +189,10 @@ function FormProduct() {
               onChange={handleChange}
             />
           </label>
-          <label htmlFor="color" className="form-product__select">
+          <label
+            htmlFor="color"
+            className={`form-product__select ${inputErrors.color ? 'error' : ''}`}
+          >
             <span>Cor</span>
             <select
               id="color"
@@ -110,7 +208,10 @@ function FormProduct() {
               <option value="laranja">Laranja</option>
             </select>
           </label>
-          <label htmlFor="price" className="form-product__text">
+          <label
+            htmlFor="price"
+            className={`form-product__text ${inputErrors.price ? 'error' : ''}`}
+          >
             <span>Valor</span>
             <input
               type="number"
@@ -120,7 +221,10 @@ function FormProduct() {
               onChange={handleChange}
             />
           </label>
-          <label htmlFor="mileage" className="form-product__text">
+          <label
+            htmlFor="mileage"
+            className={`form-product__text ${inputErrors.mileage ? 'error' : ''}`}
+          >
             <span>KM</span>
             <input
               type="number"
@@ -132,7 +236,9 @@ function FormProduct() {
               onChange={handleChange}
             />
           </label>
-          <div className="form-product__radio">
+          <div
+            className={`form-product__radio ${inputErrors.fuelType ? 'error' : ''}`}
+          >
             <span>Combustível</span>
             <label htmlFor="gasolina" className="form-product__label">
               <input
@@ -165,7 +271,10 @@ function FormProduct() {
               Diesel
             </label>
           </div>
-          <label htmlFor="transmission" className="form-product__select">
+          <label
+            htmlFor="transmission"
+            className={`form-product__select ${inputErrors.transmission ? 'error' : ''}`}
+          >
             <span>Transmissão</span>
             <select
               id="transmission"
@@ -178,7 +287,10 @@ function FormProduct() {
               <option value="manual">Manual</option>
             </select>
           </label>
-          <label htmlFor="engineSize" className="form-product__select">
+          <label
+            htmlFor="engineSize"
+            className={`form-product__select ${inputErrors.engineSize ? 'error' : ''}`}
+          >
             <span>Motor</span>
             <select
               id="engineSize"
@@ -192,7 +304,10 @@ function FormProduct() {
               <option value="2.5">2.5</option>
             </select>
           </label>
-          <label htmlFor="formFile" className="form-product__file">
+          <label
+            htmlFor="formFile"
+            className={`form-product__file ${inputErrors.formFile ? 'error' : ''}`}
+          >
             <span>Imagem</span>
             <input
               className="form-control"
@@ -213,7 +328,7 @@ function FormProduct() {
           <button
             type="submit"
             className="button--primary"
-            onClick={handleClick}
+            onClick={handleSubmit}
           >
             cadastrar
           </button>
@@ -223,4 +338,4 @@ function FormProduct() {
   );
 }
 
-export default FormProduct;
+export default FormVehicle;
