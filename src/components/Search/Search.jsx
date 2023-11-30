@@ -96,10 +96,10 @@ function Search() {
     if (filter && filter.length > 0) {
       setFilteredResults(filter);
       navigate(`/veiculos/resultado?query=${encodeURIComponent(query)}`);
-      setQuery('');
     } else {
       setFilteredResults([]);
     }
+    setQuery('');
   }
 
   function handleItemClick(id) {
@@ -114,6 +114,7 @@ function Search() {
           type="text"
           placeholder="Pesquise marca ou modelo do carro"
           className="search__input"
+          value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <button
