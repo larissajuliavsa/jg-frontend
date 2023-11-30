@@ -33,9 +33,15 @@
   }
 
   &__item {
-    padding: .5rem;
     cursor: pointer;
+    color: $color-dark;
     text-transform: capitalize;
+    
+    &--button {
+      padding: .5rem;
+      width: 100%;
+      text-align: left;
+    }
 
     &:hover {
       background-color: #00b0b92c;
