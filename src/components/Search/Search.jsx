@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Search.scss';
 import search from '../../assets/images/search.svg';
 
@@ -24,7 +24,7 @@ function Search() {
   const [query, setQuery] = useState('');
   const [data, setData] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
-  const location = useLocation();
+  // const location = useLocation();
   // const queryURL = new URLSearchParams(location.search).get('query');
   const navigate = useNavigate();
 
@@ -135,16 +135,18 @@ function Search() {
         )}
 
         {filteredResults.map((item) => (
-          <button
-            className="search__item"
-            key={item.id}
-            onClick={() => handleItemClick(item.id)}
-            type="button"
-          >
-            {item.model}
-            {' '}
-            {item.year}
-          </button>
+          <li className="search__item">
+            <button
+              key={item.id}
+              onClick={() => handleItemClick(item.id)}
+              type="button"
+            >
+              {item.model}
+              {' '}
+              {item.year}
+            </button>
+
+          </li>
         ))}
 
       </ul>

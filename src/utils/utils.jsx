@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import placeholder from '../assets/images/image-placeholder.svg';
 
-export const products = [
+export const productsMock = [
   {
     id: 1,
     name: 'Product',
@@ -57,38 +57,6 @@ export const products = [
     color: 'azul',
   },
 ];
-
-export const productImage = [
-  {
-    id: 1,
-    image: placeholder,
-  },
-  {
-    id: 2,
-    image: placeholder,
-  },
-  {
-    id: 3,
-    image: placeholder,
-  },
-  {
-    id: 4,
-    image: placeholder,
-  },
-  {
-    id: 5,
-    image: placeholder,
-  },
-  {
-    id: 6,
-    image: placeholder,
-  },
-];
-
-//  const formatCurrency = new Intl.NumberFormat('pt-BR', {
-//   style: 'currency',
-//   currency: 'BRL',
-// });
 
 export function formatCurrency(valor) {
   const valorLimpo = valor.replace(/\./g, '');
