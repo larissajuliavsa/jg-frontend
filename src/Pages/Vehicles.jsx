@@ -3,7 +3,6 @@ import React from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import Hero from '../components/Hero/Hero';
 import Footer from '../components/Footer/Footer';
-// import Catalog from '../components/Catalog/Catalog';
 import VehiclesBody from '../components/VehiclesBody/VehiclesBody';
 
 function Vehicles() {
@@ -12,7 +11,6 @@ function Vehicles() {
       <Navbar />
       <Hero />
       <VehiclesBody />
-      {/* <Catalog /> */}
       <Footer />
     </>
   );

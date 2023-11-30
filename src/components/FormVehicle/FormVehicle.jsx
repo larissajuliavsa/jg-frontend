@@ -176,15 +176,15 @@ function FormVehicle() {
 
     const formToSend = { ...form };
 
-    // try {
-    const { id } = await fetchData(formToSend, token);
-    if (id) {
-      await fetchImages(id, files, token);
-      navigate('/veiculos');
+    try {
+      const { id } = await fetchData(formToSend, token);
+      if (id) {
+        await fetchImages(id, files, token);
+        navigate('/veiculos');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
-    // } catch (error) {
-    //   console.error('Error submitting form:', error);
-    // }
   }
 
   return (
@@ -408,23 +408,3 @@ function FormVehicle() {
 }
 
 export default FormVehicle;
-
-// function ImageDecoder() {
-//   const [base64Image, setBase64Image] = useState('');
-
-//   const decodeImage = () => {
-//     const image = atob(base64Image.split(',')[1]);
-//     console.log(image);
-//   };
-
-//   return (
-//     <div>
-//       <textarea
-//         value={base64Image}
-//         onChange={(e) => setBase64Image(e.target.value)}
-//         placeholder="Insira a imagem em base64 aqui"
-//       />
-//       <button onClick={decodeImage}>Decodificar Imagem</button>
-//     </div>
-//   );
-// }

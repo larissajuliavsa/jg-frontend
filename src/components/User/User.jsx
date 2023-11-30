@@ -10,17 +10,9 @@ function User() {
     senha: '',
   });
 
-  // function renderLogin() {
-
-  // }
-
   useEffect(() => {
     const storeData = JSON.parse(localStorage.getItem('userData'));
     setUser(storeData);
-
-    // if (!storeData) {
-    //   renderLogin()
-    // }
   }, []);
 
   function handleChange(e) {

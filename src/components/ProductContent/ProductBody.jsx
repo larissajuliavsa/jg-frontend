@@ -285,8 +285,8 @@ function ProductBody() {
         isEditing ? (
           <>
             <ImagesCarousel />
-            {renderEditableFields()}
-            <div className="product__buttons">
+            <div className="product__editform">
+              {renderEditableFields()}
               <button
                 type="button"
                 onClick={handleSave}
