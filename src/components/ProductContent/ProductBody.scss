@@ -5,12 +5,15 @@
   background-color: $color-light;
   color: $color-dark;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   gap: 5rem;
+  flex-wrap: wrap;
 
   &--align {
     @include center-column;
     gap: 5rem;
+    width: fit-content;
   }
 
   &__title {
@@ -54,10 +57,9 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 2rem;
-    max-width: 60rem;
+    max-width: 50rem;
     width: 100%;
     padding: 2rem 3rem;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   }
   
   &__desc {

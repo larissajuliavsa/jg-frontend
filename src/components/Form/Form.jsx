@@ -37,8 +37,6 @@ function Form(props) {
   };
 
   const fetchLogin = async (body) => {
-    console.log('✨  body:', body);
-
     try {
       const response = await fetch('http://localhost:8081/api/auth/login', {
         method: 'POST',
@@ -75,7 +73,7 @@ function Form(props) {
     setEmptyFields((prev) => prev.filter((field) => field !== name));
   }
 
-  function handleClick(e) {
+  async function handleClick(e) {
     e.preventDefault();
 
     const checkFields = inputs
@@ -93,7 +91,6 @@ function Form(props) {
       }
 
       if (formType === 'Login') {
-        console.log('oi');
         validateLogin();
       }
     }

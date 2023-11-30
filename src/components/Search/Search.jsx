@@ -24,6 +24,7 @@ function Search() {
   const [query, setQuery] = useState('');
   const [data, setData] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
+
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -45,30 +46,17 @@ function Search() {
     }
   };
 
-  // const fetchId = async (id) => {
-  //   try {
-  //     const response = await fetch(`http://localhost:8081/api/vehicles/${id}`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-  //     const result = await response.json();
-  //     setData(result);
-  //   } catch (err) {
-  //     console.error('erro: ', err);
-  //   }
-  // };
-
   const fetchFilter = async (query) => {
     const lowercaseQuery = query.toLowerCase();
     const filteredData = data.filter(
       (item) => item.model.toLowerCase().includes(lowercaseQuery)
         || item.make.toLowerCase().includes(lowercaseQuery),
     );
+
     if (filteredData.length === 0) {
       return [];
     }
+
     const { make } = filteredData[0];
 
     try {
@@ -79,8 +67,12 @@ function Search() {
         },
       });
 
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+
       const result = await response.json();
-      return setData(result);
+      return result;
     } catch (err) {
       console.error('erro: ', err);
       return [];
@@ -100,9 +92,13 @@ function Search() {
 
   async function handleClickIcon() {
     const filter = await fetchFilter(query);
-    if (filter) {
+
+    if (filter && filter.length > 0) {
+      setFilteredResults(filter);
       navigate(`/veiculos/resultado?query=${encodeURIComponent(query)}`);
       setQuery('');
+    } else {
+      setFilteredResults([]);
     }
   }
 

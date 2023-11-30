@@ -19,7 +19,8 @@ function Footer() {
         <div className="container">
           <p className="footer__created">
             <span>@</span>
-            Site criado por Aluno A, Aluno B em 2023
+            Site criado por Gyll Marcos da Guarda Garcia,
+            Julia Silva Rizzo e Lázaro Brenner Freitas Barbosa em 2023
           </p>
           <p className="footer__contact">
             <img src={whatsapp} alt="whatsapp icon" />

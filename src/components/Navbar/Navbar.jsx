@@ -14,6 +14,7 @@ function Navbar() {
   const isHome = location.pathname === '/';
   const isVehicles = location.pathname === '/veiculos';
   const isPerfil = location.pathname === '/perfil';
+  const isUser = JSON.parse(localStorage.getItem('userData'));
 
   useEffect(() => {
     if (location.hash === '#aboutUs') {
@@ -63,12 +64,16 @@ function Navbar() {
               <div className="navbar__line" />
             </Link>
           </li>
-          <li>
-            <Link to="/perfil" className={isPerfil ? 'active' : ''}>
-              Perfil
-              <div className="navbar__line" />
-            </Link>
-          </li>
+          {
+            isUser ? (
+              <li>
+                <Link to="/perfil" className={isPerfil ? 'active' : ''}>
+                  Perfil
+                  <div className="navbar__line" />
+                </Link>
+              </li>
+            ) : null
+          }
           <li>
             <Link to="/login">
               Login
