@@ -72,6 +72,8 @@ function Catalog() {
       }
 
       const result = await response.json();
+      console.log('✨  result:', result);
+
       return result;
     } catch (err) {
       console.error('erro: ', err);
@@ -97,7 +99,6 @@ function Catalog() {
     const selectedColorKeys = Object.keys(selectedColors).filter(
       (color) => selectedColors[color],
     );
-    console.log('✨  selectedColorKeys:', selectedColorKeys);
 
     const filteredByColors = selectedColorKeys.length > 0
       ? filteredByPriceAndYear.filter((vehicle) => selectedColorKeys.includes(vehicle.color.toLowerCase()))
@@ -153,7 +154,7 @@ function Catalog() {
     if (query) {
       renderSearchMake();
     }
-  }, []);
+  }, [query]);
 
   return (
     <>
