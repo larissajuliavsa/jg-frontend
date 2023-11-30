@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Search.scss';
 import search from '../../assets/images/search.svg';
 
@@ -24,7 +24,8 @@ function Search() {
   const [query, setQuery] = useState('');
   const [data, setData] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
-
+  const location = useLocation();
+  // const queryURL = new URLSearchParams(location.search).get('query');
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -47,6 +48,8 @@ function Search() {
   };
 
   const fetchFilter = async (query) => {
+    console.log('✨  query:', query);
+
     const lowercaseQuery = query.toLowerCase();
     const filteredData = data.filter(
       (item) => item.model.toLowerCase().includes(lowercaseQuery)
@@ -72,6 +75,8 @@ function Search() {
       }
 
       const result = await response.json();
+      console.log('✨  result:', result);
+
       return result;
     } catch (err) {
       console.error('erro: ', err);

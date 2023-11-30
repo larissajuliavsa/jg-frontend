@@ -10,7 +10,9 @@ function SearchResult() {
     <>
       <Navbar />
       <Hero />
-      <Catalog />
+      <section className="catalog">
+        <Catalog />
+      </section>
       <Footer />
     </>
   );
