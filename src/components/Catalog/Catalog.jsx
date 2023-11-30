@@ -1,16 +1,35 @@
+/* eslint-disable max-len */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-shadow */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-// import { products } from '../../utils/utils';
+import Slider from 'react-slider';
 import Product from '../Product/Product';
 import './Catalog.scss';
+import '../Filter/Filter.scss';
+
+const priceMin = 0;
+const priceMax = 120000;
+const yearMin = 1990;
+const yearMax = 2024;
+const formatCurrency = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+});
 
 function Catalog() {
   const location = useLocation();
   const [allVehicles, setAllVehicles] = useState([]);
   const [searchMake, setSearchMake] = useState([]);
+  const [price, setPrice] = useState([priceMin, priceMax]);
+  const [year, setYear] = useState([yearMin, yearMax]);
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
   const query = new URLSearchParams(location.search).get('query');
+  const formatMinValue = formatCurrency.format(price[0]);
+  const formatMaxValue = formatCurrency.format(price[1]);
 
   const fetchData = async () => {
     try {
@@ -60,6 +79,40 @@ function Catalog() {
     }
   };
 
+  function handleColorClick(color) {
+    setSelectedColors((prevSelectedColors) => ({
+      ...prevSelectedColors,
+      [color.toLowerCase()]: !prevSelectedColors[color.toLowerCase()],
+    }));
+  }
+
+  function handleFilterSubmit() {
+    const filteredByPriceAndYear = allVehicles.filter(
+      (vehicle) => vehicle.price >= price[0]
+      && vehicle.price <= price[1]
+      && vehicle.year >= year[0]
+      && vehicle.year <= year[1],
+    );
+
+    const selectedColorKeys = Object.keys(selectedColors).filter(
+      (color) => selectedColors[color],
+    );
+    console.log('✨  selectedColorKeys:', selectedColorKeys);
+
+    const filteredByColors = selectedColorKeys.length > 0
+      ? filteredByPriceAndYear.filter((vehicle) => selectedColorKeys.includes(vehicle.color.toLowerCase()))
+      : filteredByPriceAndYear;
+
+    setFilteredVehicles(filteredByColors);
+  }
+
+  function handleReset() {
+    setPrice([priceMin, priceMax]);
+    setYear([yearMin, yearMax]);
+    setSelectedColors([]);
+    setFilteredVehicles(allVehicles);
+  }
+
   async function renderSearchMake() {
     const filter = await fetchSearchMake(query);
 
@@ -69,13 +122,6 @@ function Catalog() {
       setSearchMake([]);
     }
   }
-
-  useEffect(() => {
-    fetchData();
-    if (query) {
-      renderSearchMake();
-    }
-  }, []);
 
   function renderProducts(products) {
     return products && products.map((item) => (
@@ -93,23 +139,115 @@ function Catalog() {
   }
 
   function renderPage() {
-    // if (filteredResults && filteredResults.length > 0) {
-    //   return renderFilteredResults(filteredResults);
-    // }
-
-    if (searchMake && searchMake.length > 0) {
+    if (filteredVehicles.length > 0) {
+      return renderProducts(filteredVehicles);
+    } if (searchMake && searchMake.length > 0) {
       return renderProducts(searchMake);
     }
 
     return renderProducts(allVehicles);
   }
 
+  useEffect(() => {
+    fetchData();
+    if (query) {
+      renderSearchMake();
+    }
+  }, []);
+
   return (
-    <section>
-      <div className="catalog__products">
-        {renderPage()}
-      </div>
-    </section>
+    <>
+      <section className="filter">
+        <div className="filter--align container">
+          <h1 className="filter__title">Filtros</h1>
+          <div className="filter__item">
+            <p className="filter__subtitle">Preço</p>
+            <Slider
+              className="slider"
+              value={price}
+              min={priceMin}
+              max={priceMax}
+              onChange={setPrice}
+            />
+            <p className="filter__range">
+              {formatMinValue}
+              {' '}
+              até
+              {' '}
+              {formatMaxValue}
+            </p>
+          </div>
+          <div className="filter__item">
+            <p className="filter__subtitle">Ano</p>
+            <Slider
+              className="slider"
+              value={year}
+              min={yearMin}
+              max={yearMax}
+              onChange={setYear}
+            />
+            <p className="filter__range">
+              {year[0]}
+              {' '}
+              até
+              {' '}
+              {year[1]}
+            </p>
+          </div>
+          <div className="filter__item">
+            <p className="filter__subtitle">Cor</p>
+            <div className="filter__colors">
+              <div
+                className={`filter__color Preto ${selectedColors.preto ? 'active-color' : ''}`}
+                onClick={() => handleColorClick('preto')}
+              />
+              <div
+                className={`filter__color Prata ${selectedColors.prata ? 'active-color' : ''}`}
+                onClick={() => handleColorClick('prata')}
+              />
+              <div
+                className={`filter__color Branco ${selectedColors.branco ? 'active-color' : ''}`}
+                onClick={() => handleColorClick('branco')}
+              />
+              <div
+                className={`filter__color Vermelho ${selectedColors.vermelho ? 'active-color' : ''}`}
+                onClick={() => handleColorClick('vermelho')}
+              />
+              <div
+                className={`filter__color Azul ${selectedColors.azul ? 'active-color' : ''}`}
+                onClick={() => handleColorClick('azul')}
+              />
+              <div
+                className={`filter__color Laranja ${selectedColors.laranja ? 'active-color' : ''}`}
+                onClick={() => handleColorClick('laranja')}
+              />
+            </div>
+          </div>
+
+          <div className="filter__buttons">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="button--outline"
+            >
+              limpar
+            </button>
+            <button
+              type="button"
+              onClick={handleFilterSubmit}
+              className="button--primary"
+            >
+              aplicar
+            </button>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div className="catalog__products">
+          {renderPage()}
+        </div>
+      </section>
+    </>
   );
 }
 
