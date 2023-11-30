@@ -1,11 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import Product from '../Product/Product';
-import { products } from '../../utils/utils';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './ProductsCarousel.scss';
@@ -46,19 +45,41 @@ function ProductsCarousel() {
     ],
   };
 
+  const [data, setData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8081/api/vehicles/all', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      console.error('erro: ', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <section className="home-products">
         <Slider {...settings} className="home-products__carousel container">
           {
-            products.map((item, index) => (
-              <Link to={`/veiculo/${item.id}`}>
+            data && data.map((item) => (
+              <Link key={item.id} to={`/veiculo/${item.id.toString()}`}>
                 <Product
-                  key={index}
-                  index={index}
-                  name={item.name}
+                  id={item.id}
+                  name={item.model}
                   price={item.price}
-                  image={item.image}
+                  color={item.color}
+                  year={item.year}
                   type="catalog"
                 />
               </Link>

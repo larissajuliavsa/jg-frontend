@@ -1,32 +1,49 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Product.scss';
-
-import placeholder from '../../assets/images/image-placeholder.svg';
+import { formatCurrency } from '../../utils/utils';
 
 function Product(props) {
   const {
-    index, name, price, color, year, type,
+    id, name, price, year, type,
   } = props;
+
+  const [base64Images, setBase64Images] = useState([]);
+  const imageTypes = 'jpg' || 'jpeg' || 'png';
+
+  const fetchImages = async () => {
+    try {
+      const response = await fetch(`http://localhost:8081/api/vehicles/images/${id}`, {
+        method: 'GET',
+      });
+
+      const result = await response.json();
+      setBase64Images(result.toString());
+    } catch (err) {
+      console.error('erro: ', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
   return (
     <div className="products__item" key={name}>
-      <img className="products__img" src={placeholder} alt={name} />
+      <img
+        alt="icon teste"
+        className="vehicle__image"
+        src={`data:image/${imageTypes};base64,${base64Images}`}
+      />
       {
         type === 'catalog' ? (
           <>
             <p className="products__title">
               {name}
-              {' '}
-              {index}
             </p>
             <p className="products__desc">
-              R$
-              {' '}
-              {price}
-            </p>
-            <p className="products__desc">
-              {color}
+              {formatCurrency(price.toString())}
+
             </p>
             <p className="products__desc">
               {year}

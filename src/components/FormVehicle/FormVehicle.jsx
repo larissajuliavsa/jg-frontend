@@ -12,15 +12,17 @@ function FormVehicle() {
   const [form, setForm] = useState({
     make: '',
     model: '',
-    color: 'preto',
+    color: 'Preto',
     engineSize: 1.0,
     fuelType: '',
     mileage: '',
     price: '',
-    transmission: 'automatico',
-    vehicleType: '',
+    transmission: 'Automático',
+    vehicleType: 'Carro',
     year: '',
+    description: '',
   });
+
   const [inputErrors, setInputErrors] = useState({
     make: false,
     model: false,
@@ -30,9 +32,9 @@ function FormVehicle() {
     mileage: false,
     price: false,
     transmission: false,
-    vehicleType: false,
     year: false,
     formFile: false,
+    description: false,
   });
 
   const fetchData = async (body, token) => {
@@ -57,33 +59,11 @@ function FormVehicle() {
     }
   };
 
-  // const fetchImage = async (id, body) => {
-  //   try {
-  //     const formData = new FormData();
-  //     body.forEach((file, index) => {
-  //       formData.append(`image${index + 1}`, file);
-  //     });
-
-  //     const response = await fetch(`http://localhost:8081/api/vehicles/uploadImage/${id}`, {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-
-  //     console.log('✨  response:', response);
-
-  //     // const results = await response.json();
-  //     return response;
-  //   } catch (err) {
-  //     console.error('erro: ', err);
-  //   }
-  // };
-
   async function fetchImages(id, files, token) {
     const formData = new FormData();
     for (let i = 0; i < files.length; i += 1) {
-      formData.append('imagens[]', files[i]);
+      formData.append('file', files[i]);
     }
-
     const url = `http://localhost:8081/api/vehicles/uploadImage/${id}`;
 
     const response = await fetch(url, {
@@ -116,6 +96,10 @@ function FormVehicle() {
       });
 
       return;
+    }
+
+    if (type === 'text') {
+      updatedValue = value[0].toUpperCase() + value.slice(1);
     }
 
     if (name === 'year') {
@@ -192,10 +176,15 @@ function FormVehicle() {
 
     const formToSend = { ...form };
 
+    // try {
     const { id } = await fetchData(formToSend, token);
-    fetchImages(id, files, token);
-
-    if (id) navigate('/veiculos');
+    if (id) {
+      await fetchImages(id, files, token);
+      navigate('/veiculos');
+    }
+    // } catch (error) {
+    //   console.error('Error submitting form:', error);
+    // }
   }
 
   return (
@@ -207,13 +196,14 @@ function FormVehicle() {
             className={`form-product__radio ${inputErrors.vehicleType ? 'error' : ''}`}
           >
             <span>Tipo de veículo</span>
-            <label htmlFor="carro" className="form-product__label">
+            <label htmlFor="Carro" className="form-product__label">
               <input
                 type="radio"
-                id="carro"
-                value="carro"
+                id="Carro"
+                value="Carro"
                 name="vehicleType"
                 onChange={handleChange}
+                checked
               />
               Carro
             </label>
@@ -270,12 +260,12 @@ function FormVehicle() {
               className="form-select"
               onChange={handleChange}
             >
-              <option value="preto">Preto</option>
-              <option value="prata">Prata</option>
-              <option value="branco">Branco</option>
-              <option value="vermelho">Vermelho</option>
-              <option value="azul">Azul</option>
-              <option value="laranja">Laranja</option>
+              <option value="Preto">Preto</option>
+              <option value="Prata">Prata</option>
+              <option value="Branco">Branco</option>
+              <option value="Vermelho">Vermelho</option>
+              <option value="Azul">Azul</option>
+              <option value="Laranja">Laranja</option>
             </select>
           </label>
           <label
@@ -310,31 +300,31 @@ function FormVehicle() {
             className={`form-product__radio ${inputErrors.fuelType ? 'error' : ''}`}
           >
             <span>Combustível</span>
-            <label htmlFor="gasolina" className="form-product__label">
+            <label htmlFor="Gasolina" className="form-product__label">
               <input
                 type="radio"
-                id="gasolina"
-                value="gasolina"
+                id="Gasolina"
+                value="Gasolina"
                 name="fuelType"
                 onChange={handleChange}
               />
               Gasolina
             </label>
-            <label htmlFor="flex" className="form-product__label">
+            <label htmlFor="Flex" className="form-product__label">
               <input
                 type="radio"
-                id="flex"
-                value="flex"
+                id="Flex"
+                value="Flex"
                 name="fuelType"
                 onChange={handleChange}
               />
               Flex
             </label>
-            <label htmlFor="diesel" className="form-product__label">
+            <label htmlFor="Diesel" className="form-product__label">
               <input
                 type="radio"
-                id="diesel"
-                value="diesel"
+                id="Diesel"
+                value="Diesel"
                 name="fuelType"
                 onChange={handleChange}
               />
@@ -352,9 +342,9 @@ function FormVehicle() {
               className="form-select"
               onChange={handleChange}
             >
-              <option value="automático">Automático</option>
-              <option value="automatizado">Automatizado</option>
-              <option value="manual">Manual</option>
+              <option value="Automático">Automático</option>
+              <option value="Automatizado">Automatizado</option>
+              <option value="Manual">Manual</option>
             </select>
           </label>
           <label
@@ -375,6 +365,18 @@ function FormVehicle() {
             </select>
           </label>
           <label
+            htmlFor="engineSize"
+            className="form-product__textarea"
+          >
+            <span>Descrição</span>
+            <textarea
+              id="description"
+              name="description"
+              className="form-textarea"
+              onChange={handleChange}
+            />
+          </label>
+          <label
             htmlFor="formFile"
             className={`form-product__file ${inputErrors.formFile ? 'error' : ''}`}
           >
@@ -386,8 +388,8 @@ function FormVehicle() {
               id="formFile"
               name="formFile"
               onChange={handleFileChange}
-              multiple
             />
+
           </label>
         </div>
         <div className="form-product__button">
@@ -406,3 +408,23 @@ function FormVehicle() {
 }
 
 export default FormVehicle;
+
+// function ImageDecoder() {
+//   const [base64Image, setBase64Image] = useState('');
+
+//   const decodeImage = () => {
+//     const image = atob(base64Image.split(',')[1]);
+//     console.log(image);
+//   };
+
+//   return (
+//     <div>
+//       <textarea
+//         value={base64Image}
+//         onChange={(e) => setBase64Image(e.target.value)}
+//         placeholder="Insira a imagem em base64 aqui"
+//       />
+//       <button onClick={decodeImage}>Decodificar Imagem</button>
+//     </div>
+//   );
+// }

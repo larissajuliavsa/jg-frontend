@@ -12,6 +12,7 @@ function ProductBody() {
   const [data, setData] = useState(null);
   const [editedFields, setEditedFields] = useState({});
   const [isEditing, setIsEditing] = useState(false);
+  const isUser = JSON.parse(localStorage.getItem('userData'));
 
   const fetchData = async () => {
     try {
@@ -175,33 +176,33 @@ function ProductBody() {
         >
           <span>Combustível</span>
           <div className="form-product__radio--align">
-            <label htmlFor="gasolina" className="form-product__label">
+            <label htmlFor="Gasolina" className="form-product__label">
               <input
                 type="radio"
-                id="gasolina"
-                value="gasolina"
+                id="Gasolina"
+                value="Gasolina"
                 name="fuelType"
                 onChange={handleChange}
                 checked={editedFields.fuelType === 'Gasolina'}
               />
               Gasolina
             </label>
-            <label htmlFor="flex" className="form-product__label">
+            <label htmlFor="Flex" className="form-product__label">
               <input
                 type="radio"
-                id="flex"
-                value="flex"
+                id="Flex"
+                value="Flex"
                 name="fuelType"
                 onChange={handleChange}
                 checked={editedFields.fuelType === 'Flex'}
               />
               Flex
             </label>
-            <label htmlFor="diesel" className="form-product__label">
+            <label htmlFor="Diesel" className="form-product__label">
               <input
                 type="radio"
-                id="diesel"
-                value="diesel"
+                id="Diesel"
+                value="Diesel"
                 name="fuelType"
                 onChange={handleChange}
                 checked={editedFields.fuelType === 'Diesel'}
@@ -300,7 +301,7 @@ function ProductBody() {
             <>
               <ImagesCarousel />
               <section
-                className={`product--align container ${isEditing ? 'update' : ''}`}
+                className={`product--align ${isEditing ? 'update' : ''}`}
                 key={item.id}
               >
                 <div className="product__title">
@@ -346,30 +347,30 @@ function ProductBody() {
                   <div className="product__desc">
                     <p className="product__subtitle">Descrição</p>
                     <p>
-                      Opcionais: Porta-copos, Farol de neblina, Direção Elétrica,
-                      Comando de áudio no volante, Banco bi-partido, Controle de estabilidade,
-                      Distribuição eletrônica de frenagem, Kit Multimídia, MP3 Player,
-                      Pára-choques na cor do veículo.
-
+                      {item.description}
                     </p>
                   </div>
                 </div>
-                <div className="product__buttons">
-                  <button
-                    type="button"
-                    onClick={handleDelete}
-                    className="button--outline"
-                  >
-                    deletar
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleEdit}
-                    className="button--primary"
-                  >
-                    editar
-                  </button>
-                </div>
+                {
+                  isUser ? (
+                    <div className="product__buttons">
+                      <button
+                        type="button"
+                        onClick={handleDelete}
+                        className="button--outline"
+                      >
+                        deletar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleEdit}
+                        className="button--primary"
+                      >
+                        editar
+                      </button>
+                    </div>
+                  ) : null
+                }
               </section>
             </>
           ))

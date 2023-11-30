@@ -4,7 +4,7 @@ import './User.scss';
 function User() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [user, setUser] = useState({
-    nome: '',
+    name: '',
     username: '',
     email: '',
     senha: '',
@@ -43,16 +43,16 @@ function User() {
         <h1 className="user__title">Perfil</h1>
 
         <div className="user__inputs">
-          <label htmlFor="nome" className="user__label">
+          <label htmlFor="name" className="user__label">
             <p>nome</p>
             <input
               onChange={handleChange}
               type="text"
-              id="nome"
+              id="name"
               disabled={isDisabled}
               className={isDisabled ? null : 'edit'}
-              value={user.nome}
-              name="nome"
+              value={user.name}
+              name="name"
             />
           </label>
           <label htmlFor="username" className="user__label">
@@ -87,8 +87,8 @@ function User() {
               id="password"
               disabled={isDisabled}
               className={isDisabled ? null : 'edit'}
-              value={user.senha}
-              name="senha"
+              value={user.password}
+              name="password"
             />
           </label>
         </div>
