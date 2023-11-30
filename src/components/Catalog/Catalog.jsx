@@ -72,8 +72,6 @@ function Catalog() {
       }
 
       const result = await response.json();
-      console.log('✨  result:', result);
-
       return result;
     } catch (err) {
       console.error('erro: ', err);
@@ -114,16 +112,6 @@ function Catalog() {
     setFilteredVehicles(allVehicles);
   }
 
-  async function renderSearchMake() {
-    const filter = await fetchSearchMake(query);
-
-    if (filter && filter.length > 0) {
-      setSearchMake(filter);
-    } else {
-      setSearchMake([]);
-    }
-  }
-
   function renderProducts(products) {
     return products && products.map((item) => (
       <Link key={item.id} to={`/veiculo/${item.id.toString()}`}>
@@ -149,12 +137,26 @@ function Catalog() {
     return renderProducts(allVehicles);
   }
 
+  async function fetchDataWithQuery() {
+    if (query) {
+      const filter = await fetchSearchMake(query);
+      if (filter && filter.length > 0) {
+        setSearchMake(filter);
+      } else {
+        setSearchMake([]);
+      }
+    } else {
+      setFilteredVehicles(allVehicles);
+    }
+  }
+
   useEffect(() => {
     fetchData();
-    if (query) {
-      renderSearchMake();
-    }
-  }, [query]);
+  }, []);
+
+  useEffect(() => {
+    fetchDataWithQuery();
+  }, [query, allVehicles]);
 
   return (
     <>
