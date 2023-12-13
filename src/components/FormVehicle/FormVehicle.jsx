@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-alert */
 /* eslint-disable no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -51,6 +48,8 @@ function FormVehicle() {
         body: JSON.stringify(body),
       });
 
+      console.log(response.data);
+
       if (!response.ok) {
         throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
       }
@@ -64,10 +63,12 @@ function FormVehicle() {
 
   async function fetchImages(id, files, token) {
     const formData = new FormData();
-    for (let i = 0; i < files.length; i += 1) {
-      formData.append('file', files[i]);
-    }
+    formData.append('file', files);
+
     const url = `http://localhost:8081/api/vehicles/uploadImage/${id}`;
+    console.log('Estou aqui:', id);
+    console.log('Estou aqui:', files);
+    console.log('Estou aqui:', token);
 
     const response = await fetch(url, {
       method: 'POST',
@@ -76,6 +77,9 @@ function FormVehicle() {
       },
       body: formData,
     });
+
+    console.log('Estou aqui:', response);
+    console.log('Estou aqui:', formData);
 
     if (response.ok) {
       const data = await response.json();
@@ -132,11 +136,9 @@ function FormVehicle() {
   }
 
   const handleFileChange = (e) => {
-    if (e.target.files.length > 3) {
-      alert('Add somente 3 arquivos');
-      e.preventDefault();
+    if (e.target.files && e.target.files.length > 0) {
+      setFiles(Array.from(e.target.files));
     }
-    setFiles(Array.from(e.target.files));
   };
 
   function isStringEmpty(value) {
@@ -164,8 +166,7 @@ function FormVehicle() {
   }
 
   async function handleSubmit() {
-    console.log('files', files);
-    const token = localStorage.getItem('token');
+    const { token } = JSON.parse(localStorage.getItem('ROLE_SELLER'));
     const formErrors = validateForm();
     const hasError = Object.keys(formErrors).length > 0;
 
@@ -174,7 +175,7 @@ function FormVehicle() {
       return;
     }
 
-    if (!files || files.length === 0 || files.length > 3) {
+    if (!files || files.length === 0) {
       formErrors.file = true;
       setInputErrors({ ...inputErrors, ...formErrors });
       return;
@@ -184,17 +185,9 @@ function FormVehicle() {
 
     try {
       const { id } = await fetchData(formToSend, token);
-
       if (id) {
-        console.log('antes do timeout', id);
-        
-        setTimeout(async () => {
-          for (const file of files) {
-            console.log(id, file, token);
-            await fetchImages(id, file, token);
-          }
-        }, 3000);
-        // navigate('/veiculos');
+        await fetchImages(id, files, token);
+        navigate('/veiculos');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -206,22 +199,22 @@ function FormVehicle() {
       <div className="form-product--align">
         <h1 className="form-product__title">Cadastrar Veículo</h1>
         <div className="form-product__inputs">
-          <label
-            htmlFor="vehicleType"
-            className={`form-product__select ${inputErrors.vehicleType ? 'error' : ''}`}
+          <div
+            className={`form-product__radio ${inputErrors.vehicleType ? 'error' : ''}`}
           >
-            <span>Veículo</span>
-            <select
-              id="vehicleType"
-              name="vehicleType"
-              className="form-select"
-              onChange={handleChange}
-            >
-              <option value="Carro">Carro</option>
-              <option value="Caminhonete">Caminhonete</option>
-              <option value="Moto">Moto</option>
-            </select>
-          </label>
+            <span>Tipo de veículo</span>
+            <label htmlFor="Carro" className="form-product__label">
+              <input
+                type="radio"
+                id="Carro"
+                value="Carro"
+                name="vehicleType"
+                onChange={handleChange}
+                checked
+              />
+              Carro
+            </label>
+          </div>
           <label
             htmlFor="make"
             className={`form-product__text ${inputErrors.make ? 'error' : ''}`}
@@ -401,8 +394,8 @@ function FormVehicle() {
               accept="image/jpg, image/jpeg, image/png"
               id="formFile"
               name="formFile"
-              onChange={handleFileChange}
               multiple
+              onChange={handleFileChange}
             />
 
           </label>

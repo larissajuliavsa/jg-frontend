@@ -19,7 +19,7 @@ function Product(props) {
       });
 
       const result = await response.json();
-      setBase64Images(result.toString());
+      setBase64Images(result);
     } catch (err) {
       console.error('erro: ', err);
     }
