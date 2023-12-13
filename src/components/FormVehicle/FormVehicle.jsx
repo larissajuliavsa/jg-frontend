@@ -78,9 +78,6 @@ function FormVehicle() {
       body: formData,
     });
 
-    console.log('Estou aqui:', response);
-    console.log('Estou aqui:', formData);
-
     if (response.ok) {
       const data = await response.json();
       console.log('Imagens enviadas com sucesso:', data);
@@ -199,22 +196,22 @@ function FormVehicle() {
       <div className="form-product--align">
         <h1 className="form-product__title">Cadastrar Veículo</h1>
         <div className="form-product__inputs">
-          <div
-            className={`form-product__radio ${inputErrors.vehicleType ? 'error' : ''}`}
+          <label
+            htmlFor="vehicleType"
+            className={`form-product__select ${inputErrors.vehicleType ? 'error' : ''}`}
           >
             <span>Tipo de veículo</span>
-            <label htmlFor="Carro" className="form-product__label">
-              <input
-                type="radio"
-                id="Carro"
-                value="Carro"
-                name="vehicleType"
-                onChange={handleChange}
-                checked
-              />
-              Carro
-            </label>
-          </div>
+            <select
+              id="vehicleType"
+              name="vehicleType"
+              className="form-select"
+              onChange={handleChange}
+            >
+              <option value="Carro">Carro</option>
+              <option value="Caminhonete">Caminhonete</option>
+              <option value="Moto">Moto</option>
+            </select>
+          </label>
           <label
             htmlFor="make"
             className={`form-product__text ${inputErrors.make ? 'error' : ''}`}
