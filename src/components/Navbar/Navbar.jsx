@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
 import './Navbar.scss';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 
 function Navbar() {
@@ -11,10 +11,12 @@ function Navbar() {
   };
 
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === '/';
   const isVehicles = location.pathname === '/veiculos';
   const isPerfil = location.pathname === '/perfil';
-  const isUser = JSON.parse(localStorage.getItem('userData'));
+  const isUser = JSON.parse(localStorage.getItem('ROLE_ADMIN' || 'ROLE_SELLER'));
+  const isLogin = localStorage.getItem('userLogin');
 
   useEffect(() => {
     if (location.hash === '#aboutUs') {
@@ -40,6 +42,11 @@ function Navbar() {
         <div className="navbar__line" />
       </a>
     );
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userLogin');
+    navigate('/');
   };
 
   return (
@@ -74,12 +81,24 @@ function Navbar() {
               </li>
             ) : null
           }
-          <li>
-            <Link to="/login">
-              Login
-              <div className="navbar__line" />
-            </Link>
-          </li>
+
+          {
+            isLogin ? (
+              <li>
+                <button type="button" onClick={handleLogout}>
+                  Logout
+                  <div className="navbar__line" />
+                </button>
+              </li>
+            ) : (
+              <li>
+                <Link to="/login">
+                  Login
+                  <div className="navbar__line" />
+                </Link>
+              </li>
+            )
+          }
         </ul>
         <button
           type="button"

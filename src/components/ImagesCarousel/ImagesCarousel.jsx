@@ -6,8 +6,43 @@ import { useParams } from 'react-router-dom';
 import './ImagesCarousel.scss';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
 
 function ImagesCarousel() {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 980,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   const { id } = useParams();
 
   const [base64Images, setBase64Images] = useState([]);
@@ -31,11 +66,17 @@ function ImagesCarousel() {
 
   return (
     <section>
-      <img
-        alt="icon teste"
-        className="vehicle__image"
-        src={`data:image/${imageTypes};base64,${base64Images}`}
-      />
+      <Slider {...settings} className="home-products__carousel container">
+        {
+          base64Images.map((item) => (
+            <img
+              alt="icon teste"
+              className="vehicle__image"
+              src={`data:image/${imageTypes};base64,${item}`}
+            />
+          ))
+        }
+      </Slider>
     </section>
   );
 }

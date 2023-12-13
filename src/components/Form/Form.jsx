@@ -54,22 +54,45 @@ function Form(props) {
   };
 
   async function validateLogin() {
-    const { email, password } = JSON.parse(localStorage.getItem('userData'));
+    const userAdmin = JSON.parse(localStorage.getItem('ROLE_ADMIN')) || {};
+    const userSeller = JSON.parse(localStorage.getItem('ROLE_SELLER')) || {};
 
-    if (form.email === email && form.password === password) {
+    const isAdmin = form.email === userAdmin.email && form.password === userAdmin.password;
+    const isSeller = form.email === userSeller.email && form.password === userSeller.password;
+
+    if (isAdmin) {
       const { accessToken } = await fetchLogin(form);
-      localStorage.setItem('token', accessToken);
+      userAdmin.token = accessToken;
+      localStorage.setItem('ROLE_ADMIN', JSON.stringify(userAdmin));
+      localStorage.setItem('userLogin', 'ROLE_ADMIN');
+      navigate('/');
+    }
+
+    if (isSeller) {
+      const { accessToken } = await fetchLogin(form);
+      userSeller.token = accessToken;
+      localStorage.setItem('ROLE_SELLER', JSON.stringify(userSeller));
+      localStorage.setItem('userLogin', 'ROLE_SELLER');
       navigate('/');
     }
   }
 
   function handleChange(e) {
-    const { value, name } = e.target;
+    const {
+      value, name, type, checked,
+    } = e.target;
+    let updatedRoles = form.roles;
+
+    if (type === 'checkbox') {
+      updatedRoles = checked ? ['ROLE_SELLER'] : ['ROLE_ADMIN'];
+    }
 
     setForm({
       ...form,
       [name]: value,
+      roles: updatedRoles,
     });
+
     setEmptyFields((prev) => prev.filter((field) => field !== name));
   }
 
@@ -77,17 +100,18 @@ function Form(props) {
     e.preventDefault();
 
     const checkFields = inputs
-      .filter((item) => !form[item.name] && item.type !== 'radio')
-      .map((item) => item.name);
-
+      .filter((item) => !form[item.name] && item.type !== 'checkbox').map((item) => item.name);
     setEmptyFields(checkFields);
 
-    if (checkFields.length === 0) {
+    const formIsValid = checkFields.length === 0;
+
+    if (formIsValid) {
       if (formType === 'Cadastro') {
-        const body = { ...form, roles: ['ROLE_SELLER'] };
-        navigate('/');
-        localStorage.setItem('userData', JSON.stringify(body));
-        fetchRegister(body);
+        const updatedForm = { ...form, roles: form.roles || ['ROLE_ADMIN'] };
+        const user = updatedForm.roles[0];
+        localStorage.setItem(user, JSON.stringify(updatedForm));
+        fetchRegister(updatedForm);
+        navigate('/login');
       }
 
       if (formType === 'Login') {
@@ -112,9 +136,9 @@ function Form(props) {
             inputs.map((item) => (
               <label
                 htmlFor={item.name}
-                className={item.type === 'radio' ? 'form__label--radio' : 'form__label'}
+                className={item.type === 'checkbox' ? 'form__label--checkbox' : 'form__label'}
               >
-                <p>{item.name}</p>
+                <p>{item.type === 'checkbox' ? 'seller' : item.name}</p>
                 <input
                   type={item.type}
                   id={item.name}
@@ -122,11 +146,11 @@ function Form(props) {
                   name={item.name}
                   placeholder={item.placeholder ? item.placeholderText : ''}
                   className={`${
-                    item.type === 'radio' ? 'form__radio' : 'form__input'
+                    item.type === 'checkbox' ? 'form__checkbox' : 'form__input'
                   } ${emptyFields.includes(item.name) ? 'form__input--error' : ''}`}
                   onChange={handleChange}
                   required
-                  checked={item.type === 'radio' ? true : null}
+                  // checked={item.type === 'checkbox' ? true : null}
                 />
               </label>
             ))

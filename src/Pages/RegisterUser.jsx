@@ -29,7 +29,7 @@ function RegisterUser() {
     },
     {
       name: 'roles',
-      type: 'radio',
+      type: 'checkbox',
       placeholder: false,
       placeholderText: '',
     },

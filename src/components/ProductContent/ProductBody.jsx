@@ -12,7 +12,8 @@ function ProductBody() {
   const [data, setData] = useState(null);
   const [editedFields, setEditedFields] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-  const isUser = JSON.parse(localStorage.getItem('userData'));
+  const isUser = JSON.parse(localStorage.getItem('ROLE_SELLER'));
+  const isToken = localStorage.getItem('token');
 
   const fetchData = async () => {
     try {
@@ -90,15 +91,23 @@ function ProductBody() {
   function renderEditableFields() {
     return (
       <section className="form-product__inputs editing">
-        <label htmlFor="model" className="form-product__text">
-          <span>Modelo</span>
-          <input
-            type="text"
-            id="model"
-            name="model"
-            value={editedFields.model}
+        <label
+          htmlFor="vehicleType"
+          className="form-product__select"
+        >
+          <span>Veículo</span>
+          <select
+            id="vehicleType"
+            name="vehicleType"
+            className="form-select"
             onChange={handleChange}
-          />
+            value={editedFields.vehicleType}
+
+          >
+            <option value="Carro">Carro</option>
+            <option value="Caminhonete">Caminhonete</option>
+            <option value="Moto">Moto</option>
+          </select>
         </label>
         <label htmlFor="make" className="form-product__text">
           <span>Marca</span>
@@ -107,6 +116,16 @@ function ProductBody() {
             id="make"
             name="make"
             value={editedFields.make}
+            onChange={handleChange}
+          />
+        </label>
+        <label htmlFor="model" className="form-product__text">
+          <span>Modelo</span>
+          <input
+            type="text"
+            id="model"
+            name="model"
+            value={editedFields.model}
             onChange={handleChange}
           />
         </label>
@@ -319,8 +338,16 @@ function ProductBody() {
                   <div className="product__details">
                     <ul className="product__list">
                       <li className="product__item">
+                        <p className="product__subtitle">Veículo</p>
+                        <span>{item.vehicleType}</span>
+                      </li>
+                      <li className="product__item">
                         <p className="product__subtitle">Marca</p>
                         <span>{item.make}</span>
+                      </li>
+                      <li className="product__item">
+                        <p className="product__subtitle">Modelo</p>
+                        <span>{item.model}</span>
                       </li>
                       <li className="product__item">
                         <p className="product__subtitle">Cor</p>
@@ -352,7 +379,7 @@ function ProductBody() {
                   </div>
                 </div>
                 {
-                  isUser ? (
+                  isUser && isToken ? (
                     <div className="product__buttons">
                       <button
                         type="button"

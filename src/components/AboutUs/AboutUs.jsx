@@ -1,4 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import honda from '../../assets/images/honda.svg';
 import hyundai from '../../assets/images/hyundai.svg';
 import audi from '../../assets/images/audi.svg';
@@ -10,6 +12,57 @@ import bmw from '../../assets/images/bmw.svg';
 import './AboutUs.scss';
 
 function AboutUs() {
+  const navigate = useNavigate();
+
+  const fetchMake = async (make) => {
+    const response = await fetch(`http://localhost:8081/api/vehicles/filter?make=${make}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+    }
+
+    return response.json();
+  };
+
+  const fetchSearchMake = async (make) => {
+    try {
+      const makeLowerCase = make.toLowerCase();
+
+      if (makeLowerCase === 'chevrolet' || makeLowerCase === 'gm') {
+        const combinedResults = await Promise.all([
+          fetchMake('chevrolet'),
+          fetchMake('gm'),
+        ]);
+
+        return combinedResults.flat();
+      }
+
+      const result = await fetchMake(make);
+      return result;
+    } catch (err) {
+      console.error('erro: ', err);
+      return [];
+    }
+  };
+
+  async function handleClick(make) {
+    const result = await fetchSearchMake(make);
+
+    if (!result.length) {
+      alert('Não possuímos veículos desta marca no momento');
+    }
+
+    if (result.length) {
+      navigate(`/veiculos/resultado?query=${encodeURIComponent(make)}`);
+    }
+    console.log('result', result);
+  }
+
   return (
     <section className="about" id="aboutUs">
       <div className="about--align container">
@@ -66,14 +119,46 @@ function AboutUs() {
           </div>
         </div>
         <ul className="about__brands">
-          <li><img src={honda} alt="honda logo" /></li>
-          <li><img src={hyundai} alt="hyundai logo" /></li>
-          <li><img src={audi} alt="audi logo" /></li>
-          <li><img src={gm} alt="gm logo" /></li>
-          <li><img src={volkswagen} alt="volkswagen logo" /></li>
-          <li><img src={jeep} alt="jeep logo" /></li>
-          <li><img src={toyota} alt="toyota logo" /></li>
-          <li><img src={bmw} alt="bmw logo" /></li>
+          <li>
+            <button type="button" onClick={() => handleClick('honda')}>
+              <img src={honda} alt="honda logo" />
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => handleClick('hyundai')}>
+              <img src={hyundai} alt="hyundai logo" />
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => handleClick('audi')}>
+              <img src={audi} alt="audi logo" />
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => handleClick('chevrolet')}>
+              <img src={gm} alt="gm logo" />
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => handleClick('volkswagen')}>
+              <img src={volkswagen} alt="volkswagen logo" />
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => handleClick('jeep')}>
+              <img src={jeep} alt="jeep logo" />
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => handleClick('toyota')}>
+              <img src={toyota} alt="toyota logo" />
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => handleClick('bmw')}>
+              <img src={bmw} alt="bmw logo" />
+            </button>
+          </li>
         </ul>
       </div>
     </section>

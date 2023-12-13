@@ -8,12 +8,12 @@ import HomeRegister from '../HomeRegister/HomeRegister';
 function Footer() {
   const { pathname } = useLocation();
   const cadastroVeiculo = '/veiculo/cadastro';
-  const isUser = JSON.parse(localStorage.getItem('userData'));
+  const isLogin = localStorage.getItem('userLogin');
 
   return (
     <>
       {
-        isUser && pathname !== cadastroVeiculo ? <HomeRegister /> : null
+        isLogin === 'ROLE_SELLER' && pathname !== cadastroVeiculo ? <HomeRegister /> : null
       }
       <footer className="footer">
         <div className="container">

@@ -37,7 +37,11 @@
         }
       }
 
-      a {
+      button {
+        color: $color-dark !important;
+      }
+
+      a, button {
         @include center-column;
         gap: 5px;
       }

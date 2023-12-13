@@ -4,9 +4,10 @@
   padding: 10.25rem 0;
   background-color: $color-light;
   color: $color-dark;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  // display: flex;
+  // flex-direction: row;
+  // justify-content: center;
+  @include center-column;
   gap: 5rem;
   flex-wrap: wrap;
 

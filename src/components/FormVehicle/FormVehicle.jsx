@@ -1,3 +1,6 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-alert */
 /* eslint-disable no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -129,9 +132,11 @@ function FormVehicle() {
   }
 
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFiles(Array.from(e.target.files));
+    if (e.target.files.length > 3) {
+      alert('Add somente 3 arquivos');
+      e.preventDefault();
     }
+    setFiles(Array.from(e.target.files));
   };
 
   function isStringEmpty(value) {
@@ -159,6 +164,7 @@ function FormVehicle() {
   }
 
   async function handleSubmit() {
+    console.log('files', files);
     const token = localStorage.getItem('token');
     const formErrors = validateForm();
     const hasError = Object.keys(formErrors).length > 0;
@@ -168,7 +174,7 @@ function FormVehicle() {
       return;
     }
 
-    if (!files || files.length === 0) {
+    if (!files || files.length === 0 || files.length > 3) {
       formErrors.file = true;
       setInputErrors({ ...inputErrors, ...formErrors });
       return;
@@ -178,9 +184,17 @@ function FormVehicle() {
 
     try {
       const { id } = await fetchData(formToSend, token);
+
       if (id) {
-        await fetchImages(id, files, token);
-        navigate('/veiculos');
+        console.log('antes do timeout', id);
+        
+        setTimeout(async () => {
+          for (const file of files) {
+            console.log(id, file, token);
+            await fetchImages(id, file, token);
+          }
+        }, 3000);
+        // navigate('/veiculos');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -192,22 +206,22 @@ function FormVehicle() {
       <div className="form-product--align">
         <h1 className="form-product__title">Cadastrar Veículo</h1>
         <div className="form-product__inputs">
-          <div
-            className={`form-product__radio ${inputErrors.vehicleType ? 'error' : ''}`}
+          <label
+            htmlFor="vehicleType"
+            className={`form-product__select ${inputErrors.vehicleType ? 'error' : ''}`}
           >
-            <span>Tipo de veículo</span>
-            <label htmlFor="Carro" className="form-product__label">
-              <input
-                type="radio"
-                id="Carro"
-                value="Carro"
-                name="vehicleType"
-                onChange={handleChange}
-                checked
-              />
-              Carro
-            </label>
-          </div>
+            <span>Veículo</span>
+            <select
+              id="vehicleType"
+              name="vehicleType"
+              className="form-select"
+              onChange={handleChange}
+            >
+              <option value="Carro">Carro</option>
+              <option value="Caminhonete">Caminhonete</option>
+              <option value="Moto">Moto</option>
+            </select>
+          </label>
           <label
             htmlFor="make"
             className={`form-product__text ${inputErrors.make ? 'error' : ''}`}
@@ -388,6 +402,7 @@ function FormVehicle() {
               id="formFile"
               name="formFile"
               onChange={handleFileChange}
+              multiple
             />
 
           </label>

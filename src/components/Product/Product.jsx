@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import './Product.scss';
 import { formatCurrency } from '../../utils/utils';
+import placeholder from '../../assets/images/image-placeholder.svg';
 
 function Product(props) {
   const {
@@ -28,12 +29,15 @@ function Product(props) {
     fetchImages();
   }, []);
 
+  const imageToShow = base64Images
+  && base64Images.length > 0 ? `data:image/${imageTypes};base64,${base64Images[0]}` : placeholder;
+
   return (
     <div className="products__item" key={name}>
       <img
         alt="icon teste"
         className="vehicle__image"
-        src={`data:image/${imageTypes};base64,${base64Images}`}
+        src={imageToShow}
       />
       {
         type === 'catalog' ? (

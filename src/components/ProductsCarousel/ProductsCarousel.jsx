@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import Product from '../Product/Product';
+import spin from '../../assets/images/spin.svg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './ProductsCarousel.scss';
@@ -46,6 +47,7 @@ function ProductsCarousel() {
   };
 
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -57,6 +59,7 @@ function ProductsCarousel() {
       });
 
       const result = await response.json();
+      setLoading(false);
       setData(result);
     } catch (err) {
       console.error('erro: ', err);
@@ -64,28 +67,35 @@ function ProductsCarousel() {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
   }, []);
 
   return (
     <>
       <section className="home-products">
-        <Slider {...settings} className="home-products__carousel container">
-          {
-            data && data.map((item) => (
-              <Link key={item.id} to={`/veiculo/${item.id.toString()}`}>
-                <Product
-                  id={item.id}
-                  name={item.model}
-                  price={item.price}
-                  color={item.color}
-                  year={item.year}
-                  type="catalog"
-                />
-              </Link>
-            ))
-          }
-        </Slider>
+        {
+          loading ? (
+            <img src={spin} alt="spin icon" className="home-products__spin" />
+          ) : (
+            <Slider {...settings} className="home-products__carousel container">
+              {
+                data && data.map((item) => (
+                  <Link key={item.id} to={`/veiculo/${item.id.toString()}`}>
+                    <Product
+                      id={item.id}
+                      name={item.model}
+                      price={item.price}
+                      color={item.color}
+                      year={item.year}
+                      type="catalog"
+                    />
+                  </Link>
+                ))
+              }
+            </Slider>
+          )
+        }
         <Link to="/veiculos" className="button--primary">ver mais</Link>
       </section>
 

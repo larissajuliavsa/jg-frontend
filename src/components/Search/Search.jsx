@@ -45,33 +45,69 @@ function Search() {
     }
   };
 
-  const fetchFilter = async (query) => {
-    const lowercaseQuery = query.toLowerCase();
-    const filteredData = data.filter(
-      (item) => item.model.toLowerCase().includes(lowercaseQuery)
-        || item.make.toLowerCase().includes(lowercaseQuery),
-    );
+  // const fetchFilter = async (query) => {
+  //   const lowercaseQuery = query.toLowerCase();
+  //   const filteredData = data.filter(
+  //     (item) => item.model.toLowerCase().includes(lowercaseQuery)
+  //       || item.make.toLowerCase().includes(lowercaseQuery),
+  //   );
 
-    if (filteredData.length === 0) {
-      return [];
+  //   if (filteredData.length === 0) {
+  //     return [];
+  //   }
+
+  //   const { make } = filteredData[0];
+
+  //   try {
+  //     const response = await fetch(`http://localhost:8081/api/vehicles/filter?make=${make}`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+  //     }
+
+  //     const result = await response.json();
+
+  //     return result;
+  //   } catch (err) {
+  //     console.error('erro: ', err);
+  //     return [];
+  //   }
+  // };
+
+  const fetchMake = async (make) => {
+    const response = await fetch(`http://localhost:8081/api/vehicles/filter?make=${make}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
     }
 
-    const { make } = filteredData[0];
+    return response.json();
+  };
 
+  const fetchSearchMake = async (make) => {
     try {
-      const response = await fetch(`http://localhost:8081/api/vehicles/filter?make=${make}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const makeLowerCase = make.toLowerCase();
 
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      if (makeLowerCase === 'chevrolet' || makeLowerCase === 'gm') {
+        const combinedResults = await Promise.all([
+          fetchMake('chevrolet'),
+          fetchMake('gm'),
+        ]);
+
+        return combinedResults.flat();
       }
 
-      const result = await response.json();
-
+      const result = await fetchMake(make);
       return result;
     } catch (err) {
       console.error('erro: ', err);
@@ -91,7 +127,7 @@ function Search() {
   }, [query, data]);
 
   async function handleClickIcon() {
-    const filter = await fetchFilter(query);
+    const filter = await fetchSearchMake(query);
 
     if (filter && filter.length > 0) {
       setFilteredResults(filter);
